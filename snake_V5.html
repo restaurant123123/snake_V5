@@ -1,0 +1,6280 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1.0">
+
+<title>NEON SNAKE 4.3 · WORLD ARENA</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+
+    margin:0;
+    padding:0;
+
+    min-height:100%;
+
+    background:
+        radial-gradient(
+            circle at 50% 0%,
+            #17294e 0%,
+            #080d1c 45%,
+            #02040a 100%
+        );
+
+    color:#fff;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+}
+
+body{
+
+    display:flex;
+    justify-content:center;
+
+    padding:
+        12px
+        6px
+        30px;
+}
+
+.app{
+
+    width:100%;
+    max-width:1000px;
+
+}
+
+.header{
+
+    text-align:center;
+
+    margin-bottom:9px;
+
+}
+
+.logo{
+
+    font-size:27px;
+
+    font-weight:900;
+
+    letter-spacing:2px;
+
+    color:#39ffb6;
+
+    text-shadow:
+        0 0 5px #39ffb6,
+        0 0 15px #39ffb6,
+        0 0 30px #39ffb6;
+
+}
+
+.subtitle{
+
+    margin-top:3px;
+
+    font-size:9px;
+
+    letter-spacing:3px;
+
+    color:#7185aa;
+
+}
+
+
+/* =========================
+   STATS
+========================= */
+
+.stats{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(6,1fr);
+
+    gap:4px;
+
+    margin-bottom:7px;
+
+}
+
+.stat{
+
+    background:
+        rgba(9,18,38,.94);
+
+    border:
+        1px solid
+        rgba(69,202,255,.18);
+
+    border-radius:8px;
+
+    padding:6px 2px;
+
+    text-align:center;
+
+}
+
+.stat-label{
+
+    color:#6f82a3;
+
+    font-size:7px;
+
+}
+
+.stat-value{
+
+    margin-top:2px;
+
+    font-size:13px;
+
+    font-weight:bold;
+
+    color:#45caff;
+
+}
+
+#scoreValue{
+
+    color:#39ffb6;
+}
+
+#rankValue{
+
+    color:#ffd84a;
+}
+
+#lengthValue{
+
+    color:#b77cff;
+}
+
+
+/* =========================
+   GAME
+========================= */
+
+.game-wrap{
+
+    position:relative;
+
+    width:100%;
+
+    background:#030712;
+
+    border:
+        1px solid
+        rgba(69,202,255,.28);
+
+    border-radius:14px;
+
+    padding:8px;
+
+    box-shadow:
+        0 0 35px
+        rgba(0,0,0,.6);
+
+}
+
+canvas{
+
+    display:block;
+
+    width:100%;
+
+    max-width:100%;
+
+    height:auto;
+
+    margin:auto;
+
+    border-radius:8px;
+
+    background:#050a16;
+
+    touch-action:none;
+
+    user-select:none;
+
+}
+
+.pause-mini{
+
+    position:absolute;
+
+    right:15px;
+
+    top:15px;
+
+    z-index:30;
+
+    width:auto;
+
+    min-width:42px;
+
+    margin:0;
+
+    padding:8px 11px;
+
+    color:#45caff;
+
+    background:
+        rgba(3,10,25,.85);
+
+    border:
+        1px solid
+        rgba(69,202,255,.35);
+
+}
+
+
+/* =========================
+   OVERLAY
+========================= */
+
+.overlay{
+
+    position:absolute;
+
+    inset:8px;
+
+    z-index:50;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:8px;
+
+    background:
+        rgba(2,6,16,.92);
+
+    backdrop-filter:
+        blur(9px);
+
+}
+
+.overlay.hidden{
+
+    display:none;
+
+}
+
+.panel{
+
+    width:min(92%,470px);
+
+    padding:22px 16px;
+
+    text-align:center;
+
+    border:
+        1px solid
+        rgba(57,255,182,.28);
+
+    border-radius:15px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(14,27,55,.98),
+            rgba(5,10,24,.98)
+        );
+
+}
+
+.panel h1{
+
+    margin:
+        0 0 8px;
+
+    color:#39ffb6;
+
+    font-size:27px;
+
+}
+
+.panel h2{
+
+    margin:
+        5px 0 12px;
+
+    color:#45caff;
+
+}
+
+.panel p{
+
+    color:#8496b6;
+
+    font-size:11px;
+
+    line-height:1.6;
+
+}
+
+input{
+
+    width:100%;
+
+    padding:11px;
+
+    margin-bottom:9px;
+
+    border:
+        1px solid
+        rgba(69,202,255,.3);
+
+    border-radius:8px;
+
+    outline:none;
+
+    background:#060d1e;
+
+    color:#fff;
+
+    text-align:center;
+
+    font-size:14px;
+
+}
+
+button{
+
+    width:100%;
+
+    padding:10px;
+
+    margin-top:6px;
+
+    border:0;
+
+    border-radius:8px;
+
+    font-size:12px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    color:#06101a;
+
+    background:#39ffb6;
+
+}
+
+button:hover{
+
+    filter:brightness(1.08);
+
+}
+
+button.secondary{
+
+    color:#45caff;
+
+    background:#09162c;
+
+    border:
+        1px solid
+        rgba(69,202,255,.3);
+
+}
+
+button.warning{
+
+    color:#07101a;
+
+    background:#ffd84a;
+
+}
+
+
+/* =========================
+   DIFFICULTY
+========================= */
+
+.difficulty{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:5px;
+
+}
+
+.diff{
+
+    padding:9px 4px;
+
+    border:
+        1px solid
+        rgba(69,202,255,.2);
+
+    border-radius:8px;
+
+    background:#080f21;
+
+    color:#8194b5;
+
+    cursor:pointer;
+
+}
+
+.diff.active{
+
+    color:#39ffb6;
+
+    border-color:#39ffb6;
+
+}
+
+
+/* =========================
+   CONTROLS
+========================= */
+
+.controls{
+
+    display:flex;
+
+    justify-content:center;
+
+    margin-top:9px;
+
+}
+
+.dpad{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,48px);
+
+    grid-template-rows:
+        repeat(3,43px);
+
+    gap:5px;
+
+}
+
+.dpad button{
+
+    width:48px;
+
+    height:43px;
+
+    margin:0;
+
+    padding:0;
+
+    border:
+        1px solid
+        rgba(69,202,255,.25);
+
+    background:#09152a;
+
+    color:#45caff;
+
+    font-size:17px;
+
+}
+
+.dpad button:active{
+
+    background:#102846;
+
+    transform:scale(.95);
+
+}
+
+
+/* =========================
+   NAV
+========================= */
+
+.tip{
+
+    text-align:center;
+
+    margin-top:7px;
+
+    color:#617394;
+
+    font-size:9px;
+
+}
+
+.bottom-nav{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:5px;
+
+    margin-top:7px;
+
+}
+
+.nav-btn{
+
+    padding:9px 4px;
+
+    border-radius:8px;
+
+    text-align:center;
+
+    font-size:9px;
+
+    color:#8194b5;
+
+    background:#091225;
+
+    border:
+        1px solid
+        rgba(69,202,255,.13);
+
+    cursor:pointer;
+
+}
+
+
+/* =========================
+   PAGES
+========================= */
+
+.page{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:100;
+
+    overflow:auto;
+
+    padding:
+        20px
+        10px
+        35px;
+
+    background:
+        radial-gradient(
+            circle at 50% 0%,
+            #18294d,
+            #050914 65%
+        );
+
+}
+
+.page.hidden{
+
+    display:none;
+
+}
+
+.page-inner{
+
+    width:100%;
+
+    max-width:650px;
+
+    margin:auto;
+
+}
+
+.page-title{
+
+    margin:
+        8px 0 20px;
+
+    text-align:center;
+
+    font-size:25px;
+
+    color:#39ffb6;
+
+}
+
+.rank-card{
+
+    display:grid;
+
+    grid-template-columns:
+        45px 1fr 80px;
+
+    gap:7px;
+
+    align-items:center;
+
+    margin-bottom:7px;
+
+    padding:11px;
+
+    border-radius:9px;
+
+    background:#091326;
+
+    border:
+        1px solid
+        rgba(69,202,255,.14);
+
+}
+
+.rank-number{
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    color:#ffd84a;
+
+}
+
+.rank-name{
+
+    color:#dbe7ff;
+
+    font-weight:bold;
+
+    font-size:12px;
+
+}
+
+.rank-date{
+
+    margin-top:2px;
+
+    color:#637699;
+
+    font-size:8px;
+
+}
+
+.rank-score{
+
+    color:#39ffb6;
+
+    font-weight:bold;
+
+    text-align:right;
+
+}
+
+.shop-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap:8px;
+
+}
+
+.skin{
+
+    padding:12px;
+
+    text-align:center;
+
+    border-radius:10px;
+
+    background:#091326;
+
+    border:
+        1px solid
+        rgba(69,202,255,.15);
+
+}
+
+.skin-preview{
+
+    width:45px;
+
+    height:45px;
+
+    margin:auto;
+
+    margin-bottom:8px;
+
+    border-radius:50%;
+
+    box-shadow:
+        0 0 17px
+        currentColor;
+
+}
+
+.skin-name{
+
+    font-size:12px;
+
+    font-weight:bold;
+
+}
+
+.skin-price{
+
+    margin:4px 0;
+
+    color:#8192af;
+
+    font-size:9px;
+
+}
+
+.skin button{
+
+    padding:8px;
+
+    font-size:10px;
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:600px){
+
+    body{
+
+        padding:
+            7px
+            4px
+            25px;
+
+    }
+
+    .logo{
+
+        font-size:22px;
+
+    }
+
+    .stats{
+
+        gap:2px;
+
+    }
+
+    .stat{
+
+        padding:
+            5px
+            1px;
+
+    }
+
+    .stat-label{
+
+        font-size:6px;
+
+    }
+
+    .stat-value{
+
+        font-size:10px;
+
+    }
+
+    .bottom-nav{
+
+        grid-template-columns:
+            repeat(2,1fr);
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="app">
+
+
+<div class="header">
+
+    <div class="logo">
+
+        ⚡ NEON SNAKE
+
+    </div>
+
+    <div class="subtitle">
+
+        WORLD ARENA · COMPETITIVE EDITION 4.0
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     STATS
+========================= -->
+
+<div class="stats">
+
+    <div class="stat">
+
+        <div class="stat-label">
+            分数
+        </div>
+
+        <div
+            class="stat-value"
+            id="scoreValue">
+            0
+        </div>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div class="stat-label">
+            最高
+        </div>
+
+        <div
+            class="stat-value"
+            id="bestValue">
+            0
+        </div>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div class="stat-label">
+            金币
+        </div>
+
+        <div
+            class="stat-value"
+            id="coinsValue">
+            0
+        </div>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div class="stat-label">
+            排名
+        </div>
+
+        <div
+            class="stat-value"
+            id="rankValue">
+            -
+        </div>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div class="stat-label">
+            长度
+        </div>
+
+        <div
+            class="stat-value"
+            id="lengthValue">
+            4
+        </div>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div class="stat-label">
+            AI
+        </div>
+
+        <div
+            class="stat-value"
+            id="aiValue">
+            3
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     GAME
+========================= -->
+
+<div class="game-wrap">
+
+
+<button
+    class="pause-mini"
+    onclick="togglePause()">
+
+    Ⅱ
+
+</button>
+
+
+<canvas
+    id="game"
+    width="900"
+    height="600">
+</canvas>
+
+
+<!-- =========================
+     HOME
+========================= -->
+
+<div
+    class="overlay"
+    id="homeOverlay">
+
+<div class="panel">
+
+<h1>
+
+    WORLD ARENA
+
+</h1>
+
+
+<p>
+
+    🌎 120 × 120 超大型世界<br>
+
+    🎥 镜头跟随玩家<br>
+
+    🤖 AI 自动复活<br>
+
+    🛡️ AI 复活 5 秒无敌<br>
+
+    💀 AI 尸体可以吃<br>
+
+    ⚔️ 头部碰撞竞技
+
+</p>
+
+
+<input
+    id="nickname"
+    maxlength="12"
+    value="玩家"
+    placeholder="输入你的名字">
+
+
+<div class="difficulty">
+
+
+<div
+    class="diff active"
+    data-diff="easy">
+
+    🟢 简单
+
+</div>
+
+
+<div
+    class="diff"
+    data-diff="normal">
+
+    🟡 普通
+
+</div>
+
+
+<div
+    class="diff"
+    data-diff="hard">
+
+    🔴 困难
+
+</div>
+
+
+</div>
+
+
+<button onclick="startGame()">
+
+    ⚡ 开始竞技
+
+</button>
+
+
+<button
+    class="secondary"
+    onclick="showRanks()">
+
+    🏆 排行榜
+
+</button>
+
+
+<button
+    class="secondary"
+    onclick="showShop()">
+
+    🎨 皮肤
+
+</button>
+
+
+</div>
+
+</div>
+
+
+<!-- =========================
+     PAUSE
+========================= -->
+
+<div
+    class="overlay hidden"
+    id="pauseOverlay">
+
+<div class="panel">
+
+<h1>
+
+    游戏暂停
+
+</h1>
+
+
+<button onclick="togglePause()">
+
+    ▶ 继续
+
+</button>
+
+
+<button
+    class="warning"
+    onclick="restartGame()">
+
+    🔄 重新开始
+
+</button>
+
+
+<button
+    class="secondary"
+    onclick="backToLobby()">
+
+    🏠 返回大厅
+
+</button>
+
+</div>
+
+</div>
+
+
+<!-- =========================
+     GAME OVER
+========================= -->
+
+<div
+    class="overlay hidden"
+    id="gameOverOverlay">
+
+<div class="panel">
+
+<h1>
+
+    GAME OVER
+
+</h1>
+
+
+<h2 id="gameOverTitle">
+
+    你被淘汰了
+
+</h2>
+
+
+<p>
+
+    分数：
+    <b id="finalScore">
+        0
+    </b>
+
+</p>
+
+
+<p>
+
+    最终排名：
+    <b id="finalRank">
+        -
+    </b>
+
+</p>
+
+
+<p>
+
+    长度：
+    <b id="finalLength">
+        0
+    </b>
+
+</p>
+
+
+<button onclick="restartGame()">
+
+    🔄 再来一局
+
+</button>
+
+
+<button
+    class="secondary"
+    onclick="showRanks()">
+
+    🏆 排行榜
+
+</button>
+
+
+<button
+    class="secondary"
+    onclick="backToLobby()">
+
+    🏠 返回大厅
+
+</button>
+
+
+</div>
+
+</div>
+
+
+</div>
+
+
+<!-- =========================
+     D-PAD
+========================= -->
+
+<div class="controls" aria-label="虚拟摇杆控制区">
+  <div id="virtualJoystick" role="application" aria-label="拖动摇杆控制蛇的方向">
+    <div id="joystickRing"><div id="joystickKnob"></div></div>
+    <div id="joystickLabel">拖动转向</div>
+  </div>
+</div>
+
+
+<div class="tip">
+
+电脑：↑ ↓ ← → / WASD　
+· 空格暂停　
+· 手机：滑动
+
+</div>
+
+
+<div class="bottom-nav">
+
+
+<div
+    class="nav-btn"
+    onclick="showRanks()">
+
+    🏆 排行榜
+
+</div>
+
+
+<div
+    class="nav-btn"
+    onclick="showShop()">
+
+    🎨 皮肤
+
+</div>
+
+
+<div
+    class="nav-btn"
+    onclick="showWorldInfo()">
+
+    🌎 世界
+
+</div>
+
+
+<div
+    class="nav-btn"
+    onclick="resetData()">
+
+    ♻️ 重置
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+<!-- =========================
+     RANK PAGE
+========================= -->
+
+<div
+    class="page hidden"
+    id="rankPage">
+
+<div class="page-inner">
+
+<div class="page-title">
+
+    🏆 WORLD RANKING
+
+</div>
+
+
+<div id="rankList"></div>
+
+
+<button
+    class="secondary"
+    onclick="closePages()">
+
+    ← 返回
+
+</button>
+
+</div>
+
+</div>
+
+
+<!-- =========================
+     SHOP
+========================= -->
+
+<div
+    class="page hidden"
+    id="shopPage">
+
+<div class="page-inner">
+
+<div class="page-title">
+
+    🎨 SNAKE SKINS
+
+</div>
+
+
+<p
+style="
+text-align:center;
+color:#8496b7;
+font-size:11px;">
+
+    当前金币：
+    <b id="shopCoins">
+        0
+    </b>
+    🪙
+
+</p>
+
+
+<div
+    class="shop-grid"
+    id="shopGrid">
+</div>
+
+
+<button
+    class="secondary"
+    onclick="closePages()">
+
+    ← 返回
+
+</button>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   NEON SNAKE 4.0
+   WORLD ARENA
+===================================================== */
+
+
+/* =========================
+   CANVAS
+========================= */
+
+const canvas =
+    document.getElementById(
+        "game"
+    );
+
+const ctx =
+    canvas.getContext("2d");
+
+
+/* =========================
+   WORLD
+========================= */
+
+/*
+    整个世界不是 32×32
+
+    而是 80×80
+
+    玩家看到的只是其中一部分
+
+    摄像机会跟着玩家移动
+*/
+
+const WORLD_SIZE = 120;
+
+const VIEW_SIZE = 24;
+
+// Keep the cell size based on viewport height, so the snake is larger and rounder.
+const CELL = canvas.height / VIEW_SIZE;
+const VIEW_WIDTH = canvas.width / CELL;
+
+
+/* =========================
+   游戏变量
+========================= */
+
+let gameRunning=false;
+
+let paused=false;
+
+let difficulty="easy";
+
+let player=null;
+
+let snakes=[];
+
+let obstacles=[];
+
+let foods=[];
+
+let corpseFoods=[];
+
+let specialFoods=[];
+
+let nextDirection="right";
+
+let score=0;
+
+let coinsEarned=0;
+
+let gameTicks=0;
+
+let animationFrame=null;
+
+let lastTick=0;
+
+
+/* =========================
+   AI 复活
+========================= */
+
+const RESPAWN_TIME = 5000;
+
+
+/* =========================
+   AI 设置
+========================= */
+
+const LEVELS={
+
+    easy:{
+        speed:145,
+        ai:3,
+        obstacles:55,
+        foods:45
+    },
+
+    normal:{
+        speed:115,
+        ai:4,
+        obstacles:75,
+        foods:55
+    },
+
+    hard:{
+        speed:90,
+        ai:5,
+        obstacles:95,
+        foods:65
+    }
+
+};
+
+
+/* =========================
+   AI 类型
+========================= */
+
+const AI_TYPES=[
+
+    {
+        name:"NOVA",
+        color:"#45caff",
+        style:"food"
+    },
+
+    {
+        name:"HUNTER",
+        color:"#ff557d",
+        style:"hunter"
+    },
+
+    {
+        name:"CYBER",
+        color:"#ffd84a",
+        style:"food"
+    },
+
+    {
+        name:"SHADOW",
+        color:"#b77cff",
+        style:"safe"
+    },
+
+    {
+        name:"TITAN",
+        color:"#ff7b39",
+        style:"aggressive"
+    }
+
+];
+
+
+/* =========================
+   SKINS
+========================= */
+
+const SKINS=[
+
+    {
+        id:"green",
+        name:"霓虹绿",
+        price:0,
+        color:"#39ffb6"
+    },
+
+    {
+        id:"blue",
+        name:"电光蓝",
+        price:50,
+        color:"#45caff"
+    },
+
+    {
+        id:"purple",
+        name:"幻影紫",
+        price:100,
+        color:"#b77cff"
+    },
+
+    {
+        id:"gold",
+        name:"黄金蛇",
+        price:200,
+        color:"#ffd84a"
+    },
+
+    {
+        id:"pink",
+        name:"极光粉",
+        price:300,
+        color:"#ff4fd8"
+    },
+
+    {
+        id:"ice",
+        name:"冰晶白",
+        price:500,
+        color:"#dffcff"
+    },
+
+    {
+        id:"fire",
+        name:"烈焰红",
+        price:800,
+        color:"#ff554d"
+    },
+
+    {
+        id:"rainbow",
+        name:"彩虹蛇",
+        price:1200,
+        color:"rainbow"
+    }
+
+];
+
+
+/* =========================
+   DATA
+========================= */
+
+const STORAGE_KEY=
+    "neonSnakeArcade40";
+
+
+let DATA={
+
+    best:0,
+
+    coins:0,
+
+    ranks:[],
+
+    unlocked:["green"],
+
+    skin:"green"
+
+};
+
+
+function loadData(){
+
+    try{
+
+        const saved=
+            JSON.parse(
+                localStorage.getItem(
+                    STORAGE_KEY
+                )
+            );
+
+
+        if(saved){
+
+            DATA={
+                ...DATA,
+                ...saved
+            };
+
+        }
+
+    }catch(e){
+
+        console.log(e);
+
+    }
+
+}
+
+
+function saveData(){
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(DATA)
+    );
+
+}
+
+
+loadData();
+
+
+/* =========================
+   坐标
+========================= */
+
+function posKey(p){
+
+    return p.x+"_"+p.y;
+
+}
+
+
+function samePos(a,b){
+
+    return (
+        a.x===b.x &&
+        a.y===b.y
+    );
+
+}
+
+
+function distance(a,b){
+
+    return (
+        Math.abs(
+            a.x-b.x
+        )+
+        Math.abs(
+            a.y-b.y
+        )
+    );
+
+}
+
+
+function insideWorld(p){
+
+    return (
+        p.x>=0 &&
+        p.y>=0 &&
+        p.x<WORLD_SIZE &&
+        p.y<WORLD_SIZE
+    );
+
+}
+
+
+/* =========================
+   SPAWN
+========================= */
+
+const SPAWNS=[
+    {x:15,y:60},
+    {x:100,y:18},
+    {x:99,y:99},
+    {x:21,y:21},
+    {x:60,y:105},
+    {x:105,y:60}
+];
+
+
+/* =========================
+   摄像机
+========================= */
+
+let camera={
+
+    x:0,
+
+    y:0
+
+};
+
+
+function updateCamera(){
+
+    if(
+        !player ||
+        !player.body.length
+    ){
+
+        return;
+
+    }
+
+
+    const head=
+        player.body[0];
+
+
+    /*
+        摄像机中心永远跟随玩家
+
+        但靠近地图边缘时停止
+    */
+
+    camera.x=
+        head.x-
+        VIEW_SIZE/2;
+
+
+    camera.y=
+        head.y-
+        VIEW_SIZE/2;
+
+
+    camera.x=
+        Math.max(
+            0,
+            Math.min(
+                WORLD_SIZE-
+                VIEW_SIZE,
+                camera.x
+            )
+        );
+
+
+    camera.y=
+        Math.max(
+            0,
+            Math.min(
+                WORLD_SIZE-
+                VIEW_SIZE,
+                camera.y
+            )
+        );
+
+}
+
+
+/* =========================
+   WORLD POSITION
+========================= */
+
+function randomWorldPosition(){
+
+    return {
+
+        x:
+            Math.floor(
+                Math.random()*
+                WORLD_SIZE
+            ),
+
+        y:
+            Math.floor(
+                Math.random()*
+                WORLD_SIZE
+            )
+
+    };
+
+}
+
+
+/* =========================
+   障碍
+========================= */
+
+function obstacleAt(p){
+
+    return obstacles.some(
+        o=>samePos(o,p)
+    );
+
+}
+
+
+function snakeAt(p){
+
+    for(
+        const snake of snakes
+    ){
+
+        if(!snake.alive){
+
+            continue;
+
+        }
+
+
+        for(
+            const part of snake.body
+        ){
+
+            if(
+                samePos(
+                    part,
+                    p
+                )
+            ){
+
+                return true;
+
+            }
+
+        }
+
+    }
+
+
+    return false;
+
+}
+
+
+function nearSpawn(p){
+
+    for(
+        const s of SPAWNS
+    ){
+
+        if(
+            distance(
+                p,
+                s
+            )<7
+        ){
+
+            return true;
+
+        }
+
+    }
+
+
+    return false;
+
+}
+
+
+function generateObstacles(){
+
+    obstacles=[];
+
+
+    let tries=0;
+
+
+    while(
+
+        obstacles.length<
+        LEVELS[difficulty].obstacles
+
+        &&
+
+        tries<5000
+
+    ){
+
+        tries++;
+
+
+        const p=
+            randomWorldPosition();
+
+
+        /*
+            出生区域永远安全
+        */
+
+        if(
+            nearSpawn(p)
+        ){
+
+            continue;
+
+        }
+
+
+        /*
+            不要堵死
+        */
+
+        let close=false;
+
+
+        for(
+            const o of obstacles
+        ){
+
+            if(
+                distance(
+                    p,
+                    o
+                )<3
+            ){
+
+                close=true;
+
+                break;
+
+            }
+
+        }
+
+
+        if(close){
+
+            continue;
+
+        }
+
+
+        obstacles.push(p);
+
+    }
+
+}
+
+
+/* =========================
+   食物
+========================= */
+
+function foodAt(p){
+
+    return foods.some(
+        f=>samePos(f,p)
+    );
+
+}
+
+
+function findFreePosition(){
+
+    for(
+        let i=0;
+        i<1000;
+        i++
+    ){
+
+        const p=
+            randomWorldPosition();
+
+
+        if(
+            obstacleAt(p)
+        ){
+
+            continue;
+
+        }
+
+
+        if(
+            snakeAt(p)
+        ){
+
+            continue;
+
+        }
+
+
+        if(
+            foodAt(p)
+        ){
+
+            continue;
+
+        }
+
+
+        return p;
+
+    }
+
+
+    return {
+        x:40,
+        y:40
+    };
+
+}
+
+
+function createFoods(){
+
+    foods=[];
+
+
+    for(
+        let i=0;
+        i<LEVELS[difficulty].foods;
+        i++
+    ){
+
+        foods.push(
+            findFreePosition()
+        );
+
+    }
+
+}
+
+
+/* =========================
+   特殊食物
+========================= */
+
+function spawnSpecialFood(){
+
+    if(
+        specialFoods.length>=8
+    ){
+
+        return;
+
+    }
+
+
+    const p=
+        findFreePosition();
+
+
+    const types=[
+
+        {
+            type:"gold",
+            value:25,
+            coins:10,
+            color:"#ffd84a"
+        },
+
+        {
+            type:"diamond",
+            value:50,
+            coins:15,
+            color:"#b77cff"
+        },
+
+        {
+            type:"speed",
+            value:35,
+            coins:5,
+            color:"#45caff"
+        },
+
+        {
+            type:"mega",
+            value:100,
+            coins:30,
+            color:"#ff4fd8"
+        }
+
+    ];
+
+
+    const type=
+        types[
+            Math.floor(
+                Math.random()*
+                types.length
+            )
+        ];
+
+
+    specialFoods.push({
+
+        ...p,
+
+        ...type
+
+    });
+
+}
+
+
+/* =========================
+   玩家
+========================= */
+
+function createPlayer(){
+
+    return {
+
+        id:"player",
+
+        name:
+            document
+            .getElementById(
+                "nickname"
+            )
+            .value
+            .trim()
+            .slice(0,12)
+            ||
+            "玩家",
+
+        color:
+            skinColor(),
+
+        body:[
+
+            {x:60,y:60},
+            {x:59,y:60},
+            {x:58,y:60},
+            {x:57,y:60}
+
+        ],
+
+        direction:"right",
+
+        alive:true,
+
+        score:0,
+
+        coins:0,
+
+        isPlayer:true,
+
+        invincible:false
+
+    };
+
+}
+
+
+/* =========================
+   AI
+========================= */
+
+function createAI(index){
+
+    const type=
+        AI_TYPES[
+            index %
+            AI_TYPES.length
+        ];
+
+
+    const spawn=
+        SPAWNS[
+            index+1
+        ];
+
+
+    const body=[
+
+        {
+            x:spawn.x,
+            y:spawn.y
+        },
+
+        {
+            x:spawn.x-1,
+            y:spawn.y
+        },
+
+        {
+            x:spawn.x-2,
+            y:spawn.y
+        }
+
+    ];
+
+
+    return {
+
+        id:
+            "ai_"+index,
+
+        name:
+            type.name,
+
+        color:
+            type.color,
+
+        style:
+            type.style,
+
+        body,
+
+        direction:"right",
+
+        alive:true,
+
+        score:0,
+
+        coins:0,
+
+        isPlayer:false,
+
+        invincible:true,
+
+        respawnAt:
+            Date.now()+5000,
+
+        age:0,
+
+        spawnIndex:
+            index+1
+
+    };
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+function startGame(){
+
+    gameRunning=false;
+
+    paused=false;
+
+
+    score=0;
+
+    coinsEarned=0;
+
+    gameTicks=0;
+
+
+    snakes=[];
+
+    foods=[];
+
+    specialFoods=[];
+
+    corpseFoods=[];
+
+
+    generateObstacles();
+
+
+    player=
+        createPlayer();
+
+
+    snakes.push(player);
+
+
+    for(
+        let i=0;
+        i<LEVELS[difficulty].ai;
+        i++
+    ){
+
+        snakes.push(
+            createAI(i)
+        );
+
+    }
+
+
+    createFoods();
+
+
+    nextDirection="right";
+
+
+    camera.x=0;
+
+    camera.y=0;
+
+
+    document
+    .getElementById(
+        "homeOverlay"
+    )
+    .classList.add(
+        "hidden"
+    );
+
+
+    document
+    .getElementById(
+        "gameOverOverlay"
+    )
+    .classList.add(
+        "hidden"
+    );
+
+
+    gameRunning=true;
+
+
+    updateCamera();
+
+
+    lastTick=
+        performance.now();
+
+
+    if(animationFrame){
+
+        cancelAnimationFrame(
+            animationFrame
+        );
+
+    }
+
+
+    animationFrame=
+        requestAnimationFrame(
+            gameLoop
+        );
+
+
+    updateUI();
+
+}
+
+
+/* =========================
+   GAME LOOP
+========================= */
+
+function gameLoop(time){
+
+    if(!gameRunning){
+
+        return;
+
+    }
+
+
+    animationFrame=
+        requestAnimationFrame(
+            gameLoop
+        );
+
+
+    draw();
+
+
+    if(paused){
+
+        lastTick=time;
+
+        return;
+
+    }
+
+
+    if(
+        time-lastTick>=
+        LEVELS[
+            difficulty
+        ].speed
+    ){
+
+        lastTick=time;
+
+        tick();
+
+    }
+
+}
+
+
+/* =========================
+   TICK
+========================= */
+
+function tick(){
+
+    gameTicks++;
+
+
+    /*
+        玩家方向
+    */
+
+    if(
+        player &&
+        player.alive &&
+        legalTurn(
+            player.direction,
+            nextDirection
+        )
+    ){
+
+        player.direction=
+            nextDirection;
+
+    }
+
+
+    /*
+        AI 思考
+    */
+
+    for(
+        const snake of snakes
+    ){
+
+        if(
+            snake.alive &&
+            !snake.isPlayer
+        ){
+
+            aiThink(snake);
+
+        }
+
+    }
+
+
+    /*
+        AI 无敌倒计时
+    */
+
+    for(
+        const snake of snakes
+    ){
+
+        if(
+            snake.invincible &&
+            Date.now()>=
+            snake.respawnAt
+        ){
+
+            snake.invincible=false;
+
+        }
+
+    }
+
+
+    /*
+        所有蛇计算下一格
+    */
+
+    const moves=[];
+
+
+    for(
+        const snake of snakes
+    ){
+
+        if(
+            !snake.alive
+        ){
+
+            continue;
+
+        }
+
+
+        moves.push({
+
+            snake,
+
+            next:
+                nextPosition(snake)
+
+        });
+
+    }
+
+
+    /*
+        ======================
+        第一阶段：
+        墙壁 / 障碍
+        ======================
+    */
+
+    for(
+        const move of moves
+    ){
+
+        const snake=
+            move.snake;
+
+
+        /*
+            无敌 AI 不会死亡
+        */
+
+        if(
+            snake.invincible &&
+            !snake.isPlayer
+        ){
+
+            continue;
+
+        }
+
+
+        if(
+            !insideWorld(
+                move.next
+            )
+        ){
+
+            killSnake(
+                snake
+            );
+
+            continue;
+
+        }
+
+
+        if(
+            obstacleAt(
+                move.next
+            )
+        ){
+
+            killSnake(
+                snake
+            );
+
+        }
+
+    }
+
+
+    /*
+        ======================
+        第二阶段：
+        头部 → 身体
+        ======================
+
+        这是竞技蛇最重要的规则：
+
+        A 的头碰到 B 的身体
+
+        A 死
+
+        B 不死
+    */
+
+    for(
+        const move of moves
+    ){
+
+        const attacker=
+            move.snake;
+
+
+        if(
+            !attacker.alive
+        ){
+
+            continue;
+
+        }
+
+
+        if(
+            attacker.invincible &&
+            !attacker.isPlayer
+        ){
+
+            continue;
+
+        }
+
+
+        for(
+            const defender of snakes
+        ){
+
+            if(
+                !defender.alive ||
+                defender===attacker
+            ){
+
+                continue;
+
+            }
+
+
+            /*
+                无敌 AI 身体不能被碰死
+            */
+
+            if(
+                defender.invincible &&
+                !defender.isPlayer
+            ){
+
+                continue;
+
+            }
+
+
+            /*
+                检查身体
+
+                尾巴如果这一 tick 会移动，
+                最后一格不算固定身体
+            */
+
+            for(
+                let i=0;
+                i<defender.body.length;
+                i++
+            ){
+
+                if(
+                    i===
+                    defender.body.length-1
+                ){
+
+                    continue;
+
+                }
+
+
+                if(
+                    samePos(
+                        move.next,
+                        defender.body[i]
+                    )
+                ){
+
+                    killSnake(
+                        attacker
+                    );
+
+
+                    break;
+
+                }
+
+            }
+
+
+            if(
+                !attacker.alive
+            ){
+
+                break;
+
+            }
+
+        }
+
+    }
+
+
+    /*
+        ======================
+        第三阶段：
+        头对头
+        ======================
+
+        不再简单地双方一起死亡。
+
+        计算谁先进入对方头部区域。
+
+        有攻击主动权的蛇胜。
+    */
+
+    resolveHeadToHead(
+        moves
+    );
+
+
+    /*
+        ======================
+        第四阶段：
+        真正移动
+        ======================
+    */
+
+    for(
+        const move of moves
+    ){
+
+        const snake=
+            move.snake;
+
+
+        if(
+            !snake.alive
+        ){
+
+            continue;
+
+        }
+
+
+        snake.body.unshift(
+            move.next
+        );
+
+
+        let grew=false;
+
+
+        /*
+            普通食物
+        */
+
+        for(
+            let i=foods.length-1;
+            i>=0;
+            i--
+        ){
+
+            if(
+                samePos(
+                    move.next,
+                    foods[i]
+                )
+            ){
+
+                grew=true;
+
+
+                snake.score+=10;
+
+
+                if(
+                    snake.isPlayer
+                ){
+
+                    score=
+                        snake.score;
+
+                    coinsEarned++;
+
+                }
+
+
+                foods.splice(
+                    i,
+                    1
+                );
+
+
+                foods.push(
+                    findFreePosition()
+                );
+
+
+                break;
+
+            }
+
+        }
+
+
+        /*
+            特殊食物
+        */
+
+        for(
+            let i=specialFoods.length-1;
+            i>=0;
+            i--
+        ){
+
+            const f=
+                specialFoods[i];
+
+
+            if(
+                samePos(
+                    move.next,
+                    f
+                )
+            ){
+
+                grew=true;
+
+
+                snake.score+=
+                    f.value;
+
+
+                snake.coins+=
+                    f.coins;
+
+
+                if(
+                    snake.isPlayer
+                ){
+
+                    score=
+                        snake.score;
+
+                    coinsEarned+=
+                        f.coins;
+
+                }
+
+
+                specialFoods.splice(
+                    i,
+                    1
+                );
+
+
+                break;
+
+            }
+
+        }
+
+
+        /*
+            尸体食物
+        */
+
+        for(
+            let i=corpseFoods.length-1;
+            i>=0;
+            i--
+        ){
+
+            const f=
+                corpseFoods[i];
+
+
+            if(
+                samePos(
+                    move.next,
+                    f
+                )
+            ){
+
+                grew=true;
+
+
+                snake.score+=15;
+
+
+                snake.coins+=2;
+
+
+                if(
+                    snake.isPlayer
+                ){
+
+                    score=
+                        snake.score;
+
+                    coinsEarned+=2;
+
+                }
+
+
+                corpseFoods.splice(
+                    i,
+                    1
+                );
+
+
+                break;
+
+            }
+
+        }
+
+
+        /*
+            吃到东西才变长
+
+            没吃东西删除尾巴
+        */
+
+        if(!grew){
+
+            snake.body.pop();
+
+        }
+
+
+        if(
+            snake.isPlayer
+        ){
+
+            score=
+                snake.score;
+
+        }
+
+    }
+
+
+    /*
+        AI 死亡处理
+
+        尸体会变成食物
+    */
+
+    for(
+        const snake of snakes
+    ){
+
+        if(
+            snake._deadProcessed
+        ){
+
+            continue;
+
+        }
+
+
+        if(
+            !snake.alive &&
+            snake.body.length>0
+        ){
+
+            snake._deadProcessed=true;
+
+
+            createCorpseFood(
+                snake
+            );
+
+
+            if(
+                !snake.isPlayer
+            ){
+
+                scheduleRespawn(
+                    snake
+                );
+
+            }
+
+        }
+
+    }
+
+
+    /*
+        AI 自动复活
+    */
+
+    respawnDeadAI();
+
+
+    /*
+        自动增加特殊食物
+    */
+
+    if(
+        Math.random()<0.08
+    ){
+
+        spawnSpecialFood();
+
+    }
+
+
+    /*
+        食物最低数量保护
+
+        永远不会只剩一个食物
+    */
+
+    while(
+        foods.length<
+        LEVELS[difficulty].foods
+    ){
+
+        foods.push(
+            findFreePosition()
+        );
+
+    }
+
+
+    updateCamera();
+
+    updateUI();
+
+
+    /*
+        玩家死亡
+    */
+
+    if(
+        !player.alive
+    ){
+
+        endGame();
+
+    }
+
+}
+
+
+/* =========================
+   HEAD VS HEAD
+========================= */
+
+function resolveHeadToHead(
+    moves
+){
+
+    for(
+        let i=0;
+        i<moves.length;
+        i++
+    ){
+
+        for(
+            let j=i+1;
+            j<moves.length;
+            j++
+        ){
+
+            const a=
+                moves[i];
+
+            const b=
+                moves[j];
+
+
+            if(
+                !a.snake.alive ||
+                !b.snake.alive
+            ){
+
+                continue;
+
+            }
+
+
+            if(
+                samePos(
+                    a.next,
+                    b.next
+                )
+            ){
+
+                /*
+                    如果其中一个是无敌 AI
+                    它直接胜出
+                */
+
+                if(
+                    a.snake.invincible &&
+                    !a.snake.isPlayer
+                ){
+
+                    killSnake(
+                        b.snake
+                    );
+
+                    continue;
+
+                }
+
+
+                if(
+                    b.snake.invincible &&
+                    !b.snake.isPlayer
+                ){
+
+                    killSnake(
+                        a.snake
+                    );
+
+                    continue;
+
+                }
+
+
+                /*
+                    根据蛇当前长度决定主动权
+
+                    长蛇有更强的头部优势
+
+                    如果一样长：
+                    玩家拥有一点主动权
+                */
+
+                if(
+                    a.snake.body.length>
+                    b.snake.body.length
+                ){
+
+                    killSnake(
+                        b.snake
+                    );
+
+                }
+
+                else if(
+                    b.snake.body.length>
+                    a.snake.body.length
+                ){
+
+                    killSnake(
+                        a.snake
+                    );
+
+                }
+
+                else{
+
+                    /*
+                        长度一样时
+
+                        玩家稍微有主动权
+
+                        防止开局双方同时暴毙
+                    */
+
+                    if(
+                        a.snake.isPlayer
+                    ){
+
+                        killSnake(
+                            b.snake
+                        );
+
+                    }
+
+                    else if(
+                        b.snake.isPlayer
+                    ){
+
+                        killSnake(
+                            a.snake
+                        );
+
+                    }
+
+                    else{
+
+                        /*
+                            两个 AI 同长度
+                            随机决定谁先碰到
+                        */
+
+                        if(
+                            Math.random()<0.5
+                        ){
+
+                            killSnake(
+                                b.snake
+                            );
+
+                        }else{
+
+                            killSnake(
+                                a.snake
+                            );
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    }
+
+}
+
+
+/* =========================
+   KILL
+========================= */
+
+function killSnake(
+    snake
+){
+
+    if(
+        !snake.alive
+    ){
+
+        return;
+
+    }
+
+
+    /*
+        无敌 AI 不会死亡
+    */
+
+    if(
+        snake.invincible &&
+        !snake.isPlayer
+    ){
+
+        return;
+
+    }
+
+
+    snake.alive=false;
+
+
+    /*
+        不立即清空 body
+
+        因为下一阶段要把尸体
+        变成食物
+    */
+
+}
+
+
+/* =========================
+   尸体 → 食物
+========================= */
+
+function createCorpseFood(
+    snake
+){
+
+    /*
+        每一节身体都变成食物
+
+        但为了避免一次生成几百个
+        限制最大数量
+    */
+
+    const body=
+        snake.body.slice();
+
+
+    const max=
+        Math.min(
+            body.length,
+            80
+        );
+
+
+    for(
+        let i=0;
+        i<max;
+        i++
+    ){
+
+        const p=
+            body[i];
+
+
+        corpseFoods.push({
+
+            x:p.x,
+
+            y:p.y,
+
+            color:
+                snake.color,
+
+            owner:
+                snake.name
+
+        });
+
+    }
+
+
+    /*
+        尸体最多保留 500 个
+    */
+
+    if(
+        corpseFoods.length>500
+    ){
+
+        corpseFoods=
+            corpseFoods.slice(
+                -500
+            );
+
+    }
+
+
+    /*
+        死亡蛇的身体清空
+
+        但 AI 对象保留
+        用于复活
+    */
+
+    if(
+        !snake.isPlayer
+    ){
+
+        snake.body=[];
+
+    }
+
+}
+
+
+/* =========================
+   AI RESPAWN
+========================= */
+
+function scheduleRespawn(
+    snake
+){
+
+    snake.respawnAt=
+        Date.now()+
+        RESPAWN_TIME;
+
+}
+
+
+function respawnDeadAI(){
+
+    for(
+        const snake of snakes
+    ){
+
+        if(
+            snake.isPlayer ||
+            snake.alive
+        ){
+
+            continue;
+
+        }
+
+
+        if(
+            !snake.respawnAt
+        ){
+
+            continue;
+
+        }
+
+
+        if(
+            Date.now()<
+            snake.respawnAt
+        ){
+
+            continue;
+
+        }
+
+
+        const spawn=
+            findSafeSpawn();
+
+
+        snake.body=[
+
+            {
+                x:spawn.x,
+                y:spawn.y
+            },
+
+            {
+                x:spawn.x-1,
+                y:spawn.y
+            },
+
+            {
+                x:spawn.x-2,
+                y:spawn.y
+            }
+
+        ];
+
+
+        snake.direction=
+            "right";
+
+
+        snake.alive=true;
+
+
+        /*
+            五秒无敌
+        */
+
+        snake.invincible=true;
+
+
+        snake.respawnAt=
+            Date.now()+
+            RESPAWN_TIME;
+
+
+        snake._deadProcessed=false;
+
+    }
+
+}
+
+
+/* =========================
+   安全出生
+========================= */
+
+function findSafeSpawn(){
+
+    for(
+        let i=0;
+        i<1000;
+        i++
+    ){
+
+        const spawn=
+            SPAWNS[
+                Math.floor(
+                    Math.random()*
+                    SPAWNS.length
+                )
+            ];
+
+
+        let safe=true;
+
+
+        for(
+            const snake of snakes
+        ){
+
+            if(
+                !snake.alive
+            ){
+
+                continue;
+
+            }
+
+
+            if(
+                snake.body.length===0
+            ){
+
+                continue;
+
+            }
+
+
+            if(
+                distance(
+                    spawn,
+                    snake.body[0]
+                )<12
+            ){
+
+                safe=false;
+
+                break;
+
+            }
+
+        }
+
+
+        if(!safe){
+
+            continue;
+
+        }
+
+
+        if(
+            obstacleAt(spawn)
+        ){
+
+            continue;
+
+        }
+
+
+        return spawn;
+
+    }
+
+
+    return {
+
+        x:40,
+
+        y:40
+
+    };
+
+}
+
+
+/* =========================
+   AI
+========================= */
+
+function aiThink(
+    snake
+){
+
+    snake.age++;
+
+
+    const dirs=[
+
+        "up",
+        "down",
+        "left",
+        "right"
+
+    ];
+
+
+    const choices=[];
+
+
+    for(
+        const dir of dirs
+    ){
+
+        if(
+            !legalTurn(
+                snake.direction,
+                dir
+            )
+        ){
+
+            continue;
+
+        }
+
+
+        const fake={
+
+            ...snake,
+
+            direction:dir
+
+        };
+
+
+        const next=
+            nextPosition(
+                fake
+            );
+
+
+        if(
+            !insideWorld(next)
+        ){
+
+            continue;
+
+        }
+
+
+        if(
+            obstacleAt(next)
+        ){
+
+            continue;
+
+        }
+
+
+        /*
+            无敌期间可以穿过
+            玩家和其他蛇
+
+            但是仍然不穿墙
+        */
+
+        if(
+            !snake.invincible &&
+            dangerForAI(
+                next,
+                snake
+            )
+        ){
+
+            continue;
+
+        }
+
+
+        let targetDistance=999;
+
+
+        /*
+            找最近食物
+        */
+
+        for(
+            const f of foods
+        ){
+
+            targetDistance=
+                Math.min(
+                    targetDistance,
+                    distance(
+                        next,
+                        f
+                    )
+                );
+
+        }
+
+
+        /*
+            尸体也算目标
+
+            让 AI 会主动吃尸体
+        */
+
+        for(
+            const f of corpseFoods
+        ){
+
+            targetDistance=
+                Math.min(
+                    targetDistance,
+                    distance(
+                        next,
+                        f
+                    )
+                );
+
+        }
+
+
+        /*
+            特殊食物
+        */
+
+        for(
+            const f of specialFoods
+        ){
+
+            targetDistance=
+                Math.min(
+                    targetDistance,
+                    distance(
+                        next,
+                        f
+                    )
+                );
+
+        }
+
+
+        choices.push({
+
+            dir,
+
+            next,
+
+            targetDistance
+
+        });
+
+    }
+
+
+    if(
+        choices.length===0
+    ){
+
+        return;
+
+    }
+
+
+    /*
+        Hunter
+
+        普通/困难会观察玩家
+    */
+
+    if(
+        snake.style==="hunter" &&
+        difficulty!=="easy" &&
+        player &&
+        player.alive &&
+        !snake.invincible &&
+        Math.random()<0.30
+    ){
+
+        choices.forEach(
+            c=>{
+
+                c.playerDistance=
+                    distance(
+                        c.next,
+                        player.body[0]
+                    );
+
+            }
+        );
+
+
+        choices.sort(
+            (a,b)=>
+                a.playerDistance-
+                b.playerDistance
+        );
+
+
+        snake.direction=
+            choices[0].dir;
+
+
+        return;
+
+    }
+
+
+    /*
+        正常寻找食物
+    */
+
+    choices.sort(
+        (a,b)=>
+            a.targetDistance-
+            b.targetDistance
+    );
+
+
+    /*
+        不要每一 tick 都转弯
+    */
+
+    if(
+        Math.random()<0.70
+    ){
+
+        snake.direction=
+            choices[0].dir;
+
+    }
+
+}
+
+
+/* =========================
+   AI DANGER
+========================= */
+
+function dangerForAI(
+    pos,
+    self
+){
+
+    for(
+        const snake of snakes
+    ){
+
+        if(
+            !snake.alive
+        ){
+
+            continue;
+
+        }
+
+
+        /*
+            不检查自己的尾巴
+        */
+
+        for(
+            let i=0;
+            i<snake.body.length;
+            i++
+        ){
+
+            if(
+                snake===self &&
+                i===
+                snake.body.length-1
+            ){
+
+                continue;
+
+            }
+
+
+            if(
+                samePos(
+                    pos,
+                    snake.body[i]
+                )
+            ){
+
+                return true;
+
+            }
+
+        }
+
+    }
+
+
+    return false;
+
+}
+
+
+/* =========================
+   NEXT POSITION
+========================= */
+
+function nextPosition(
+    snake
+){
+
+    const head=
+        snake.body[0];
+
+
+    let x=
+        head.x;
+
+    let y=
+        head.y;
+
+
+    if(
+        snake.direction==="up"
+    ){
+
+        y--;
+
+    }
+
+    else if(
+        snake.direction==="down"
+    ){
+
+        y++;
+
+    }
+
+    else if(
+        snake.direction==="left"
+    ){
+
+        x--;
+
+    }
+
+    else{
+
+        x++;
+
+    }
+
+
+    return {
+        x,
+        y
+    };
+
+}
+
+
+/* =========================
+   DIRECTION
+========================= */
+
+function legalTurn(
+    current,
+    next
+){
+
+    if(
+        current==="up" &&
+        next==="down"
+    ){
+
+        return false;
+
+    }
+
+
+    if(
+        current==="down" &&
+        next==="up"
+    ){
+
+        return false;
+
+    }
+
+
+    if(
+        current==="left" &&
+        next==="right"
+    ){
+
+        return false;
+
+    }
+
+
+    if(
+        current==="right" &&
+        next==="left"
+    ){
+
+        return false;
+
+    }
+
+
+    return true;
+
+}
+
+
+/* =========================
+   PLAYER CONTROL
+========================= */
+
+function setDirection(
+    dir
+){
+
+    if(
+        !gameRunning ||
+        paused ||
+        !player ||
+        !player.alive
+    ){
+
+        return;
+
+    }
+
+
+    if(
+        !legalTurn(
+            player.direction,
+            dir
+        )
+    ){
+
+        return;
+
+    }
+
+
+    nextDirection=dir;
+
+}
+
+
+/* =========================
+   KEYBOARD
+========================= */
+
+document.addEventListener(
+    "keydown",
+    e=>{
+
+        const key=
+            e.key.toLowerCase();
+
+
+        if(
+            [
+                "arrowup",
+                "arrowdown",
+                "arrowleft",
+                "arrowright",
+                " "
+            ].includes(key)
+        ){
+
+            e.preventDefault();
+
+        }
+
+
+        if(
+            key==="arrowup" ||
+            key==="w"
+        ){
+
+            setDirection("up");
+
+        }
+
+        else if(
+            key==="arrowdown" ||
+            key==="s"
+        ){
+
+            setDirection("down");
+
+        }
+
+        else if(
+            key==="arrowleft" ||
+            key==="a"
+        ){
+
+            setDirection("left");
+
+        }
+
+        else if(
+            key==="arrowright" ||
+            key==="d"
+        ){
+
+            setDirection("right");
+
+        }
+
+        else if(
+            key===" "
+        ){
+
+            togglePause();
+
+        }
+
+    },
+    {
+        passive:false
+    }
+);
+
+
+/* =========================
+   TOUCH
+========================= */
+
+let touchStartX=0;
+
+let touchStartY=0;
+
+
+canvas.addEventListener(
+    "touchstart",
+    e=>{
+
+        const t=
+            e.changedTouches[0];
+
+
+        touchStartX=
+            t.clientX;
+
+        touchStartY=
+            t.clientY;
+
+    },
+    {
+        passive:true
+    }
+);
+
+
+canvas.addEventListener(
+    "touchend",
+    e=>{
+
+        const t=
+            e.changedTouches[0];
+
+
+        const dx=
+            t.clientX-
+            touchStartX;
+
+
+        const dy=
+            t.clientY-
+            touchStartY;
+
+
+        if(
+            Math.abs(dx)<18 &&
+            Math.abs(dy)<18
+        ){
+
+            return;
+
+        }
+
+
+        if(
+            Math.abs(dx)>
+            Math.abs(dy)
+        ){
+
+            if(dx>0){
+
+                setDirection("right");
+
+            }
+
+            else{
+
+                setDirection("left");
+
+            }
+
+        }
+
+        else{
+
+            if(dy>0){
+
+                setDirection("down");
+
+            }
+
+            else{
+
+                setDirection("up");
+
+            }
+
+        }
+
+    },
+    {
+        passive:true
+    }
+);
+
+
+/* =========================
+   PAUSE
+========================= */
+
+function togglePause(){
+
+    if(
+        !gameRunning
+    ){
+
+        return;
+
+    }
+
+
+    paused=!paused;
+
+
+    document
+    .getElementById(
+        "pauseOverlay"
+    )
+    .classList.toggle(
+        "hidden",
+        !paused
+    );
+
+}
+
+
+/* =========================
+   DRAW
+========================= */
+
+function draw(){
+
+    ctx.fillStyle=
+        "#050a16";
+
+
+    ctx.fillRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+
+    drawWorldGrid();
+
+    drawWorldBorder();
+
+    drawObstacles();
+
+    drawFoods();
+
+    drawSpecialFoods();
+
+    drawCorpseFoods();
+
+    drawSnakes();
+
+    drawArenaInfo();
+
+}
+
+
+/* =========================
+   GRID
+========================= */
+
+function drawWorldGrid(){
+
+    ctx.save();
+
+
+    ctx.strokeStyle=
+        "rgba(69,202,255,.065)";
+
+
+    ctx.lineWidth=1;
+
+
+    for(
+        let i=0;
+        i<=VIEW_SIZE;
+        i++
+    ){
+
+        const x=
+            i*CELL;
+
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            x,
+            0
+        );
+
+        ctx.lineTo(
+            x,
+            canvas.height
+        );
+
+        ctx.stroke();
+
+
+        const y=
+            i*CELL;
+
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            0,
+            y
+        );
+
+        ctx.lineTo(
+            canvas.width,
+            y
+        );
+
+        ctx.stroke();
+
+    }
+
+
+    ctx.restore();
+
+}
+
+
+/* =========================
+   WORLD BORDER
+========================= */
+
+function drawWorldBorder(){
+
+    ctx.save();
+
+
+    const left=
+        -camera.x*CELL;
+
+    const top=
+        -camera.y*CELL;
+
+
+    const right=
+        (WORLD_SIZE-camera.x)
+        *CELL;
+
+    const bottom=
+        (WORLD_SIZE-camera.y)
+        *CELL;
+
+
+    ctx.strokeStyle=
+        "rgba(57,255,182,.35)";
+
+    ctx.lineWidth=5;
+
+
+    ctx.strokeRect(
+        left,
+        top,
+        WORLD_SIZE*CELL,
+        WORLD_SIZE*CELL
+    );
+
+
+    ctx.restore();
+
+}
+
+
+/* =========================
+   OBSTACLES
+========================= */
+
+function drawObstacles(){
+
+    for(
+        const o of obstacles
+    ){
+
+        const sx=
+            (o.x-camera.x)*
+            CELL;
+
+        const sy=
+            (o.y-camera.y)*
+            CELL;
+
+
+        if(
+            sx<-CELL ||
+            sy<-CELL ||
+            sx>canvas.width ||
+            sy>canvas.height
+        ){
+
+            continue;
+
+        }
+
+
+        ctx.save();
+
+
+        ctx.fillStyle=
+            "#101c34";
+
+
+        ctx.shadowBlur=6;
+
+        ctx.shadowColor=
+            "#45caff";
+
+
+        ctx.fillRect(
+            sx+2,
+            sy+2,
+            CELL-4,
+            CELL-4
+        );
+
+
+        ctx.strokeStyle=
+            "rgba(69,202,255,.35)";
+
+
+        ctx.strokeRect(
+            sx+2,
+            sy+2,
+            CELL-4,
+            CELL-4
+        );
+
+
+        ctx.restore();
+
+    }
+
+}
+
+
+/* =========================
+   NORMAL FOOD
+========================= */
+
+function drawFoods(){
+
+    for(
+        const f of foods
+    ){
+
+        drawFoodPoint(
+            f,
+            "#39ffb6",
+            0.22
+        );
+
+    }
+
+}
+
+
+/* =========================
+   CORPSE FOOD
+========================= */
+
+function drawCorpseFoods(){
+
+    for(
+        const f of corpseFoods
+    ){
+
+        const sx=
+            (f.x-camera.x)*
+            CELL;
+
+        const sy=
+            (f.y-camera.y)*
+            CELL;
+
+
+        if(
+            sx<-CELL ||
+            sy<-CELL ||
+            sx>canvas.width ||
+            sy>canvas.height
+        ){
+
+            continue;
+
+        }
+
+
+        ctx.save();
+
+
+        ctx.fillStyle=
+            f.color;
+
+
+        ctx.shadowBlur=10;
+
+        ctx.shadowColor=
+            f.color;
+
+
+        ctx.fillRect(
+            sx+5,
+            sy+5,
+            CELL-10,
+            CELL-10
+        );
+
+
+        /*
+            尸体食物中间的小点
+        */
+
+        ctx.fillStyle=
+            "#fff";
+
+
+        ctx.globalAlpha=.55;
+
+
+        ctx.beginPath();
+
+        ctx.arc(
+            sx+CELL/2,
+            sy+CELL/2,
+            2,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+
+        ctx.restore();
+
+    }
+
+}
+
+
+/* =========================
+   SPECIAL
+========================= */
+
+function drawSpecialFoods(){
+
+    for(
+        const f of specialFoods
+    ){
+
+        const sx=
+            (f.x-camera.x)*
+            CELL+
+            CELL/2;
+
+        const sy=
+            (f.y-camera.y)*
+            CELL+
+            CELL/2;
+
+
+        ctx.save();
+
+
+        ctx.translate(
+            sx,
+            sy
+        );
+
+
+        ctx.rotate(
+            performance.now()/600
+        );
+
+
+        ctx.fillStyle=
+            f.color;
+
+
+        ctx.shadowBlur=20;
+
+        ctx.shadowColor=
+            f.color;
+
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            0,
+            -CELL*.32
+        );
+
+        ctx.lineTo(
+            CELL*.28,
+            0
+        );
+
+        ctx.lineTo(
+            0,
+            CELL*.32
+        );
+
+        ctx.lineTo(
+            -CELL*.28,
+            0
+        );
+
+        ctx.closePath();
+
+        ctx.fill();
+
+
+        ctx.restore();
+
+    }
+
+}
+
+
+/* =========================
+   FOOD POINT
+========================= */
+
+function drawFoodPoint(
+    p,
+    color,
+    size
+){
+
+    const sx=
+        (p.x-camera.x)*
+        CELL+
+        CELL/2;
+
+    const sy=
+        (p.y-camera.y)*
+        CELL+
+        CELL/2;
+
+
+    if(
+        sx<-CELL ||
+        sy<-CELL ||
+        sx>canvas.width ||
+        sy>canvas.height
+    ){
+
+        return;
+
+    }
+
+
+    ctx.save();
+
+
+    ctx.fillStyle=color;
+
+
+    ctx.shadowBlur=14;
+
+    ctx.shadowColor=color;
+
+
+    ctx.beginPath();
+
+    ctx.arc(
+        sx,
+        sy,
+        CELL*size,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    ctx.restore();
+
+}
+
+
+/* =========================
+   SNAKES
+========================= */
+
+function drawSnakes(){
+
+    for(
+        const snake of snakes
+    ){
+
+        if(
+            !snake.alive ||
+            !snake.body.length
+        ){
+
+            continue;
+
+        }
+
+
+        /*
+            无敌 AI 半透明
+
+            像真正游戏一样
+        */
+
+        const alpha=
+            snake.invincible
+            ? .32
+            : 1;
+
+
+        snake.body.forEach(
+            (part,index)=>{
+
+                const sx=
+                    (part.x-camera.x)*
+                    CELL;
+
+                const sy=
+                    (part.y-camera.y)*
+                    CELL;
+
+
+                if(
+                    sx<-CELL ||
+                    sy<-CELL ||
+                    sx>canvas.width ||
+                    sy>canvas.height
+                ){
+
+                    return;
+
+                }
+
+
+                let color=
+                    snake.color;
+
+
+                if(
+                    snake.isPlayer &&
+                    DATA.skin==="rainbow"
+                ){
+
+                    color=
+                        `hsl(${
+                            (
+                                performance.now()/5+
+                                index*30
+                            )%360
+                        },90%,65%)`;
+
+                }
+
+
+                ctx.save();
+
+
+                ctx.globalAlpha=
+                    alpha;
+
+
+                ctx.fillStyle=
+                    color;
+
+
+                ctx.shadowBlur=
+                    index===0
+                    ? 18
+                    : 8;
+
+
+                ctx.shadowColor=
+                    color;
+
+
+                ctx.fillRect(
+                    sx+2,
+                    sy+2,
+                    CELL-4,
+                    CELL-4
+                );
+
+
+                /*
+                    无敌效果
+
+                    闪烁边框
+                */
+
+                if(
+                    snake.invincible
+                ){
+
+                    ctx.strokeStyle=
+                        "#ffffff";
+
+
+                    ctx.globalAlpha=
+                        .35+
+                        Math.sin(
+                            performance.now()/90
+                        )*.2;
+
+
+                    ctx.strokeRect(
+                        sx+1,
+                        sy+1,
+                        CELL-2,
+                        CELL-2
+                    );
+
+                }
+
+
+                if(
+                    index===0
+                ){
+
+                    drawEyes(
+                        snake,
+                        sx,
+                        sy
+                    );
+
+                }
+
+
+                ctx.restore();
+
+            }
+        );
+
+    }
+
+}
+
+
+/* =========================
+   EYES
+========================= */
+
+function drawEyes(
+    snake,
+    x,
+    y
+){
+
+    ctx.fillStyle=
+        "#06101b";
+
+
+    const s=2.5;
+
+
+    if(
+        snake.direction==="right"
+    ){
+
+        ctx.fillRect(
+            x+CELL*.66,
+            y+CELL*.27,
+            s,
+            s
+        );
+
+        ctx.fillRect(
+            x+CELL*.66,
+            y+CELL*.65,
+            s,
+            s
+        );
+
+    }
+
+    else if(
+        snake.direction==="left"
+    ){
+
+        ctx.fillRect(
+            x+CELL*.25,
+            y+CELL*.27,
+            s,
+            s
+        );
+
+        ctx.fillRect(
+            x+CELL*.25,
+            y+CELL*.65,
+            s,
+            s
+        );
+
+    }
+
+    else if(
+        snake.direction==="up"
+    ){
+
+        ctx.fillRect(
+            x+CELL*.27,
+            y+CELL*.25,
+            s,
+            s
+        );
+
+        ctx.fillRect(
+            x+CELL*.65,
+            y+CELL*.25,
+            s,
+            s
+        );
+
+    }
+
+    else{
+
+        ctx.fillRect(
+            x+CELL*.27,
+            y+CELL*.66,
+            s,
+            s
+        );
+
+        ctx.fillRect(
+            x+CELL*.65,
+            y+CELL*.66,
+            s,
+            s
+        );
+
+    }
+
+}
+
+
+/* =========================
+   ARENA INFO
+========================= */
+
+function drawArenaInfo(){
+
+    if(
+        !gameRunning
+    ){
+
+        return;
+
+    }
+
+
+    const ranking=
+        [...snakes]
+        .filter(
+            s=>
+                s.alive
+        )
+        .sort(
+            (a,b)=>
+                b.score-a.score
+        );
+
+
+    ctx.save();
+
+
+    const width=170;
+
+    const height=
+        25+
+        Math.min(
+            6,
+            ranking.length
+        )*17;
+
+
+    ctx.fillStyle=
+        "rgba(2,7,18,.78)";
+
+
+    ctx.fillRect(
+        7,
+        7,
+        width,
+        height
+    );
+
+
+    ctx.fillStyle=
+        "#39ffb6";
+
+
+    ctx.font=
+        "bold 9px Arial";
+
+
+    ctx.fillText(
+        "WORLD ARENA",
+        14,
+        20
+    );
+
+
+    ranking
+    .slice(
+        0,
+        6
+    )
+    .forEach(
+        (snake,index)=>{
+
+            ctx.fillStyle=
+                snake.isPlayer
+                ? "#39ffb6"
+                : snake.color;
+
+
+            ctx.font=
+                "9px Arial";
+
+
+            let name=
+                snake.name;
+
+
+            if(
+                name.length>16
+            ){
+
+                name=
+                    name.slice(
+                        0,
+                        16
+                    );
+
+            }
+
+
+            const shield=
+                snake.invincible
+                ? " 🛡"
+                : "";
+
+
+            ctx.fillText(
+                `${index+1}. ${name}${shield}`,
+                14,
+                38+
+                index*17
+            );
+
+
+            ctx.textAlign="right";
+
+
+            ctx.fillText(
+                snake.body.length,
+                width-10,
+                38+
+                index*17
+            );
+
+
+            ctx.textAlign="left";
+
+        }
+    );
+
+
+    /*
+        地图坐标
+    */
+
+    ctx.fillStyle=
+        "#7185a5";
+
+
+    ctx.font=
+        "8px Arial";
+
+
+    ctx.fillText(
+        `WORLD ${Math.floor(
+            player.body[0].x
+        )},${Math.floor(
+            player.body[0].y
+        )}`,
+        14,
+        canvas.height-12
+    );
+
+
+    ctx.restore();
+
+}
+
+
+/* =========================
+   UPDATE UI
+========================= */
+
+function updateUI(){
+
+    document
+    .getElementById(
+        "scoreValue"
+    )
+    .textContent=
+        score;
+
+
+    document
+    .getElementById(
+        "bestValue"
+    )
+    .textContent=
+        DATA.best;
+
+
+    document
+    .getElementById(
+        "coinsValue"
+    )
+    .textContent=
+        DATA.coins;
+
+
+    document
+    .getElementById(
+        "lengthValue"
+    )
+    .textContent=
+        player &&
+        player.body
+        ? player.body.length
+        : 4;
+
+
+    document
+    .getElementById(
+        "aiValue"
+    )
+    .textContent=
+        snakes
+        .filter(
+            s=>
+                !s.isPlayer &&
+                s.alive
+        )
+        .length;
+
+
+    document
+    .getElementById(
+        "rankValue"
+    )
+    .textContent=
+        getPlayerRank();
+
+}
+
+
+/* =========================
+   RANK
+========================= */
+
+function getPlayerRank(){
+
+    if(
+        !player
+    ){
+
+        return "-";
+
+    }
+
+
+    const ranking=
+        [...snakes]
+        .sort(
+            (a,b)=>
+                b.score-a.score
+        );
+
+
+    const index=
+        ranking.indexOf(
+            player
+        );
+
+
+    if(
+        index<0
+    ){
+
+        return "-";
+
+    }
+
+
+    return "#"+(
+        index+1
+    );
+
+}
+
+
+/* =========================
+   END GAME
+========================= */
+
+function endGame(){
+
+    if(
+        !gameRunning
+    ){
+
+        return;
+
+    }
+
+
+    gameRunning=false;
+
+
+    score=
+        player.score;
+
+
+    const ranking=
+        [...snakes]
+        .sort(
+            (a,b)=>
+                b.score-a.score
+        );
+
+
+    const rank=
+        ranking.indexOf(
+            player
+        )+1;
+
+
+    const earned=
+        Math.floor(
+            score/10
+        )+
+        coinsEarned;
+
+
+    DATA.coins+=
+        earned;
+
+
+    if(
+        score>DATA.best
+    ){
+
+        DATA.best=
+            score;
+
+    }
+
+
+    DATA.ranks.push({
+
+        name:
+            player.name,
+
+        score,
+
+        length:
+            player.body.length,
+
+        date:
+            new Date()
+            .toLocaleDateString()
+
+    });
+
+
+    DATA.ranks.sort(
+        (a,b)=>
+            b.score-a.score
+    );
+
+
+    DATA.ranks=
+        DATA.ranks.slice(
+            0,
+            10
+        );
+
+
+    saveData();
+
+
+    document
+    .getElementById(
+        "finalScore"
+    )
+    .textContent=
+        score;
+
+
+    document
+    .getElementById(
+        "finalRank"
+    )
+    .textContent=
+        "#"+rank;
+
+
+    document
+    .getElementById(
+        "finalLength"
+    )
+    .textContent=
+        player.body.length;
+
+
+    document
+    .getElementById(
+        "gameOverTitle"
+    )
+    .textContent=
+        rank===1
+        ? "🏆 WORLD CHAMPION"
+        : "💥 你被淘汰了";
+
+
+    document
+    .getElementById(
+        "gameOverOverlay"
+    )
+    .classList.remove(
+        "hidden"
+    );
+
+
+    updateUI();
+
+}
+
+
+/* =========================
+   RESTART
+========================= */
+
+function restartGame(){
+
+    startGame();
+
+}
+
+
+/* =========================
+   LOBBY
+========================= */
+
+function backToLobby(){
+
+    gameRunning=false;
+
+    paused=false;
+
+
+    document
+    .getElementById(
+        "pauseOverlay"
+    )
+    .classList.add(
+        "hidden"
+    );
+
+
+    document
+    .getElementById(
+        "gameOverOverlay"
+    )
+    .classList.add(
+        "hidden"
+    );
+
+
+    document
+    .getElementById(
+        "homeOverlay"
+    )
+    .classList.remove(
+        "hidden"
+    );
+
+}
+
+
+/* =========================
+   PAGES
+========================= */
+
+function showRanks(){
+
+    renderRanks();
+
+
+    document
+    .getElementById(
+        "rankPage"
+    )
+    .classList.remove(
+        "hidden"
+    );
+
+}
+
+
+function showShop(){
+
+    renderShop();
+
+
+    document
+    .getElementById(
+        "shopPage"
+    )
+    .classList.remove(
+        "hidden"
+    );
+
+}
+
+
+function closePages(){
+
+    document
+    .querySelectorAll(
+        ".page"
+    )
+    .forEach(
+        page=>
+            page.classList.add(
+                "hidden"
+            )
+    );
+
+}
+
+
+function showWorldInfo(){
+
+    alert(
+
+        "WORLD ARENA 4.0\n\n"+
+        "世界地图：80 × 80\n"+
+        "镜头：跟随玩家\n"+
+        "普通食物：大量存在\n"+
+        "尸体：可以吃\n"+
+        "AI：自动复活\n"+
+        "AI 复活：5 秒无敌\n"+
+        "无敌状态：半透明\n"+
+        "头撞身体：攻击者死亡\n"+
+        "竞技规则：看谁的头先碰到"
+
+    );
+
+}
+
+
+/* =========================
+   RANK LIST
+========================= */
+
+function renderRanks(){
+
+    const list=
+        document.getElementById(
+            "rankList"
+        );
+
+
+    list.innerHTML="";
+
+
+    if(
+        DATA.ranks.length===0
+    ){
+
+        list.innerHTML=`
+
+        <div class="rank-card">
+
+            <div class="rank-number">
+                -
+            </div>
+
+            <div class="rank-name">
+                还没有比赛记录
+            </div>
+
+            <div class="rank-score">
+                0
+            </div>
+
+        </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    DATA.ranks.forEach(
+        (r,index)=>{
+
+            const div=
+                document.createElement(
+                    "div"
+                );
+
+
+            div.className=
+                "rank-card";
+
+
+            const medal=
+                index===0
+                ?"🥇"
+                :
+                index===1
+                ?"🥈"
+                :
+                index===2
+                ?"🥉"
+                :
+                "#"+(index+1);
+
+
+            div.innerHTML=`
+
+                <div class="rank-number">
+                    ${medal}
+                </div>
+
+                <div>
+
+                    <div class="rank-name">
+                        ${escapeHTML(
+                            r.name
+                        )}
+                    </div>
+
+                    <div class="rank-date">
+                        ${r.date}
+                    </div>
+
+                </div>
+
+                <div class="rank-score">
+                    ${r.score}
+                </div>
+
+            `;
+
+
+            list.appendChild(
+                div
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================
+   SHOP
+========================= */
+
+function skinColor(){
+
+    const skin=
+        SKINS.find(
+            s=>
+                s.id===DATA.skin
+        );
+
+
+    return skin
+        ? skin.color
+        : "#39ffb6";
+
+}
+
+
+function renderShop(){
+
+    document
+    .getElementById(
+        "shopCoins"
+    )
+    .textContent=
+        DATA.coins;
+
+
+    const grid=
+        document.getElementById(
+            "shopGrid"
+        );
+
+
+    grid.innerHTML="";
+
+
+    SKINS.forEach(
+        skin=>{
+
+            const unlocked=
+                DATA.unlocked
+                .includes(
+                    skin.id
+                );
+
+
+            const selected=
+                DATA.skin===
+                skin.id;
+
+
+            const div=
+                document.createElement(
+                    "div"
+                );
+
+
+            div.className=
+                "skin";
+
+
+            let preview=
+                skin.color;
+
+
+            if(
+                skin.id==="rainbow"
+            ){
+
+                preview=
+                "linear-gradient(135deg,#ff4f4f,#ffd84a,#39ffb6,#45caff,#b77cff)";
+
+            }
+
+
+            div.innerHTML=`
+
+                <div
+                    class="skin-preview"
+                    style="
+                    background:${preview};
+                    color:${skin.color};">
+                </div>
+
+                <div class="skin-name">
+                    ${skin.name}
+                </div>
+
+                <div class="skin-price">
+
+                    ${
+                        skin.price===0
+                        ?"免费"
+                        :
+                        skin.price+
+                        " 🪙"
+                    }
+
+                </div>
+
+                ${
+                    selected
+                    ?
+                    `
+                    <button
+                    class="secondary"
+                    disabled>
+                    ✓ 使用中
+                    </button>
+                    `
+                    :
+                    unlocked
+                    ?
+                    `
+                    <button
+                    onclick="
+                    selectSkin('${skin.id}')
+                    ">
+                    使用
+                    </button>
+                    `
+                    :
+                    `
+                    <button
+                    class="warning"
+                    onclick="
+                    buySkin('${skin.id}')
+                    ">
+                    购买
+                    </button>
+                    `
+                }
+
+            `;
+
+
+            grid.appendChild(
+                div
+            );
+
+        }
+    );
+
+}
+
+
+function buySkin(id){
+
+    const skin=
+        SKINS.find(
+            s=>
+                s.id===id
+        );
+
+
+    if(
+        !skin
+    ){
+
+        return;
+
+    }
+
+
+    if(
+        DATA.coins<
+        skin.price
+    ){
+
+        alert(
+            "金币不够！"
+        );
+
+        return;
+
+    }
+
+
+    DATA.coins-=
+        skin.price;
+
+
+    DATA.unlocked.push(
+        id
+    );
+
+
+    DATA.skin=id;
+
+
+    saveData();
+
+    renderShop();
+
+    updateUI();
+
+}
+
+
+function selectSkin(id){
+
+    if(
+        !DATA.unlocked
+        .includes(id)
+    ){
+
+        return;
+
+    }
+
+
+    DATA.skin=id;
+
+
+    saveData();
+
+    renderShop();
+
+}
+
+
+/* =========================
+   RESET
+========================= */
+
+function resetData(){
+
+    if(
+        !confirm(
+            "确定重置全部游戏数据吗？"
+        )
+    ){
+
+        return;
+
+    }
+
+
+    localStorage.removeItem(
+        STORAGE_KEY
+    );
+
+
+    location.reload();
+
+}
+
+
+/* =========================
+   HTML SAFE
+========================= */
+
+function escapeHTML(str){
+
+    return String(str)
+
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
+
+}
+
+
+/* =========================
+   DIFFICULTY
+========================= */
+
+document
+.querySelectorAll(".diff")
+.forEach(
+    btn=>{
+
+        btn.addEventListener(
+            "click",
+            ()=>{
+
+                document
+                .querySelectorAll(
+                    ".diff"
+                )
+                .forEach(
+                    b=>
+                        b.classList.remove(
+                            "active"
+                        )
+                );
+
+
+                btn.classList.add(
+                    "active"
+                );
+
+
+                difficulty=
+                    btn.dataset.diff;
+
+            }
+        );
+
+    }
+);
+
+
+/* =========================
+   INITIAL
+========================= */
+
+updateUI();
+
+/* NEON SNAKE 4.1 upgrade patch: preserves original lobby, shop, ranks, coins, skins and saved data. */
+(function(){
+  const style=document.createElement('style');
+  style.textContent=`
+    .dpad{grid-template-columns:repeat(3,48px);grid-template-rows:repeat(2,43px);grid-template-areas:". up ." "left down right";}
+    .dpad .up{grid-area:up}.dpad .left{grid-area:left}.dpad .down{grid-area:down}.dpad .right{grid-area:right}
+    .dpad button{border-radius:13px;touch-action:none;user-select:none;-webkit-user-select:none}
+    canvas{touch-action:none}
+  `;
+  document.head.appendChild(style);
+
+  const originalStartGame=window.startGame;
+  let steer=0, boostHeld=false, brakeHeld=false, moveAccumulator=0, lastFrame=0;
+  let aimAngle=0, hasAim=false;
+  const TAU=Math.PI*2;
+  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+  const wrapAngle=a=>Math.atan2(Math.sin(a),Math.cos(a));
+  const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
+  const bodyGap=.62;
+  const baseSpeed=5.25;
+
+  function headOf(s){return s.body&&s.body[0]||{x:40,y:40}}
+  function ensureMotion(s){
+    const h=headOf(s);
+    if(typeof s.angle!=='number'){
+      const map={right:0,left:Math.PI,up:-Math.PI/2,down:Math.PI/2};
+      s.angle=map[s.direction]??0;
+    }
+    if(!s.trail||!s.trail.length){
+      s.trail=[];
+      const count=Math.max(s.body.length,4);
+      for(let i=0;i<count;i++)s.trail.push({x:h.x-Math.cos(s.angle)*i*bodyGap,y:h.y-Math.sin(s.angle)*i*bodyGap});
+    }
+    if(typeof s.aiThinkTimer!=='number')s.aiThinkTimer=Math.random()*.3;
+  }
+  function setSnakeDirectionLabel(s){
+    const a=s.angle;
+    s.direction=Math.abs(Math.cos(a))>Math.abs(Math.sin(a))?(Math.cos(a)>0?'right':'left'):(Math.sin(a)>0?'down':'up');
+  }
+  function rebuildBody(s){
+    const trail=s.trail;
+    if(!trail||trail.length<2)return;
+    const targetLen=Math.max(4,Math.min(260,s.targetLength||s.body.length||4));
+    const result=[]; let travelled=0, segIndex=0;
+    for(let i=0;i<targetLen;i++){
+      const wanted=i*bodyGap;
+      while(segIndex<trail.length-2){
+        const d=dist(trail[segIndex],trail[segIndex+1]);
+        if(travelled+d>=wanted)break;
+        travelled+=d;segIndex++;
+      }
+      const a=trail[segIndex],b=trail[Math.min(segIndex+1,trail.length-1)];
+      const d=dist(a,b),t=d?clamp((wanted-travelled)/d,0,1):0;
+      result.push({x:a.x+(b.x-a.x)*t,y:a.y+(b.y-a.y)*t});
+    }
+    s.body=result;
+    const keep=targetLen*bodyGap+4;
+    let total=0;
+    for(let i=1;i<trail.length;i++){
+      total+=dist(trail[i-1],trail[i]);
+      if(total>keep){trail.length=i+1;break;}
+    }
+  }
+  function safePoint(p){
+    if(!insideWorld(p)||obstacleAt({x:Math.round(p.x),y:Math.round(p.y)}))return false;
+    for(const s of snakes){if(!s.alive||!s.body)continue;const h=headOf(s);if(dist(p,h)<3.8)return false;}
+    return true;
+  }
+  function smoothCamera(){
+    if(!player||!player.alive||!player.body.length)return;
+    const h=headOf(player);
+    const lead=2.4;
+    const tx=clamp(h.x+Math.cos(player.angle||0)*lead-VIEW_WIDTH/2,0,WORLD_SIZE-VIEW_WIDTH);
+    const ty=clamp(h.y+Math.sin(player.angle||0)*lead-VIEW_SIZE/2,0,WORLD_SIZE-VIEW_SIZE);
+    const f=.10;
+    camera.x+=(tx-camera.x)*f;
+    camera.y+=(ty-camera.y)*f;
+  }
+  window.updateCamera=smoothCamera;
+
+  window.startGame=function(){
+    originalStartGame();
+    steer=0;boostHeld=false;brakeHeld=false;moveAccumulator=0;lastFrame=0;hasAim=false;
+    for(const s of snakes){
+      ensureMotion(s);
+      s.targetLength=Math.max(4,s.body.length);
+      s.trail=[];
+      const h=headOf(s);
+      for(let i=0;i<s.body.length;i++)s.trail.push({x:s.body[i].x,y:s.body[i].y});
+      if(s.trail.length<2)s.trail.push({x:h.x-.6,y:h.y});
+      s.angle=({right:0,left:Math.PI,up:-Math.PI/2,down:Math.PI/2})[s.direction]??0;
+      s.aiThinkTimer=Math.random()*.35;
+    }
+    const h=headOf(player);camera.x=clamp(h.x-VIEW_WIDTH/2,0,WORLD_SIZE-VIEW_WIDTH);camera.y=clamp(h.y-VIEW_SIZE/2,0,WORLD_SIZE-VIEW_SIZE);
+  };
+
+  // Left/right steer continuously; up/down control speed. Touch swipes can aim at any angle.
+  window.setDirection=function(dir){
+    if(!gameRunning||paused||!player||!player.alive)return;
+    if(dir==='left'){steer=-1;return}
+    if(dir==='right'){steer=1;return}
+    if(dir==='up'){boostHeld=true;return}
+    if(dir==='down'){brakeHeld=true;return}
+    const map={ArrowUp:-Math.PI/2,ArrowDown:Math.PI/2,ArrowLeft:Math.PI,ArrowRight:0,upAngle:-Math.PI/2,downAngle:Math.PI/2,leftAngle:Math.PI,rightAngle:0};
+    if(typeof dir==='number'){aimAngle=dir;hasAim=true;return}
+    if(map[dir]!==undefined){aimAngle=map[dir];hasAim=true;}
+  };
+  function releaseControl(dir){if(dir==='left'||dir==='right')steer=0;if(dir==='up')boostHeld=false;if(dir==='down')brakeHeld=false;}
+  document.querySelectorAll('.dpad button').forEach(btn=>{
+    const dir=['up','left','down','right'].find(k=>btn.classList.contains(k));
+    if(!dir)return;
+    btn.addEventListener('pointerdown',e=>{e.preventDefault();setDirection(dir);});
+    ['pointerup','pointercancel','pointerleave'].forEach(ev=>btn.addEventListener(ev,()=>releaseControl(dir)));
+    btn.addEventListener('click',e=>{e.preventDefault();if(dir==='left'||dir==='right'){steer=dir==='left'?-1:1;setTimeout(()=>releaseControl(dir),120)}else{setDirection(dir);setTimeout(()=>releaseControl(dir),180)}});
+  });
+  window.addEventListener('pointerup',()=>{steer=0;boostHeld=false;brakeHeld=false});
+  const oldKeyHandler=e=>{};
+  document.addEventListener('keydown',e=>{
+    const k=e.key.toLowerCase();
+    if(['arrowleft','arrowright','arrowup','arrowdown',' '].includes(k))e.preventDefault();
+    if(k==='arrowleft'||k==='a'){steer=-1;}
+    else if(k==='arrowright'||k==='d'){steer=1;}
+    else if(k==='arrowup'||k==='w'){boostHeld=true;}
+    else if(k==='arrowdown'||k==='s'){brakeHeld=true;}
+  },{passive:false});
+  document.addEventListener('keyup',e=>{
+    const k=e.key.toLowerCase();
+    if(k==='arrowleft'||k==='a'){if(steer<0)steer=0}
+    if(k==='arrowright'||k==='d'){if(steer>0)steer=0}
+    if(k==='arrowup'||k==='w')boostHeld=false;
+    if(k==='arrowdown'||k==='s')brakeHeld=false;
+  });
+  // Override swipe handler behavior while retaining the original canvas and UI.
+  const cv=document.getElementById('game');
+  let swipe=null;
+  cv.addEventListener('pointerdown',e=>{swipe={x:e.clientX,y:e.clientY};},{passive:true});
+  cv.addEventListener('pointerup',e=>{
+    if(!swipe||!gameRunning||paused)return;
+    const dx=e.clientX-swipe.x,dy=e.clientY-swipe.y;
+    if(Math.hypot(dx,dy)>12){aimAngle=Math.atan2(dy,dx);hasAim=true;}
+    swipe=null;
+  });
+  cv.addEventListener('pointercancel',()=>swipe=null);
+
+  function nearestTarget(s){
+    let best=null,bestD=Infinity;
+    for(const group of [foods,corpseFoods,specialFoods])for(const f of group){const d=(f.x-s.body[0].x)**2+(f.y-s.body[0].y)**2;if(d<bestD){bestD=d;best=f}}
+    return best;
+  }
+  function aiUpdate(s,dt){
+    s.aiThinkTimer-=dt;
+    const h=headOf(s);const elapsedFactor=clamp(gameTicks/2200,0,1);
+    const sizeFactor=clamp((s.body.length-3)/30,0,1);
+    const diffFactor=difficulty==='easy'?.0:difficulty==='normal'?.12:.23;
+    if(s.aiThinkTimer<=0){
+      s.aiThinkTimer=.22+Math.random()*.26;
+      const skill=.16+elapsedFactor*.25+sizeFactor*.32+diffFactor;
+      const target=nearestTarget(s);
+      let desired=s.angle;
+      if(target&&Math.random()<skill){desired=Math.atan2(target.y-h.y,target.x-h.x)}
+      else desired+=randSafe(-1.25,1.25);
+      // Look ahead for walls, obstacles and bodies; early AI makes mistakes occasionally.
+      const candidates=[desired,desired-.65,desired+.65,desired-1.25,desired+1.25,desired+Math.PI*.72];
+      let bestA=s.angle,bestScore=-Infinity;
+      for(const a of candidates){
+        const p={x:h.x+Math.cos(a)*2.2,y:h.y+Math.sin(a)*2.2};
+        let val=Math.random()*1.3-Math.abs(wrapAngle(a-s.angle))*.18;
+        if(p.x<1.5||p.y<1.5||p.x>WORLD_SIZE-1.5||p.y>WORLD_SIZE-1.5)val-=15;
+        if(obstacleAt({x:Math.round(p.x),y:Math.round(p.y)}))val-=10;
+        for(const other of snakes){if(!other.alive||other===s)continue;for(let i=2;i<other.body.length;i+=2){if(dist(p,other.body[i])<1.4)val-=3.5}}
+        if(target)val+=(Math.hypot(target.x-p.x,target.y-p.y)*-.17)*skill;
+        if(val>bestScore){bestScore=val;bestA=a;}
+      }
+      s.aiAim=bestA;
+    }
+    const diff=wrapAngle((s.aiAim??s.angle)-s.angle);
+    const turnRate=1.15+sizeFactor*.75+elapsedFactor*.25+diffFactor;
+    s.angle=wrapAngle(s.angle+clamp(diff,-turnRate*dt,turnRate*dt));
+  }
+  function randSafe(a,b){return a+Math.random()*(b-a)}
+  function hitObstacle(p){
+    if(p.x<.6||p.y<.6||p.x>WORLD_SIZE-.6||p.y>WORLD_SIZE-.6)return true;
+    return obstacles.some(o=>Math.hypot(p.x-o.x,p.y-o.y)<.56);
+  }
+  function hitBody(s,p,now){
+    for(const other of snakes){
+      if(!other.alive||other===s||!other.body.length)continue;
+      // Bodies touching bodies are harmless; only the moving head is tested.
+      if(other.invincible&&!other.isPlayer)continue;
+      for(let i=3;i<other.body.length;i++)if(dist(p,other.body[i])<.47)return other;
+    }
+    for(let i=3;i<s.body.length;i++)if(dist(p,s.body[i])<.42)return s;
+    return null;
+  }
+  function killAtContinuous(s){
+    if(!s.alive)return;
+    if(s.invincible&&!s.isPlayer)return;
+    killSnake(s);
+  }
+  function collectContinuous(s){
+    const h=headOf(s);let grew=0;
+    for(let i=foods.length-1;i>=0;i--)if(dist(h,foods[i])<.52){foods.splice(i,1);s.score=(s.score||0)+10;grew+=1;if(s.isPlayer){score=s.score;coinsEarned+=1;}}
+    for(let i=specialFoods.length-1;i>=0;i--){const f=specialFoods[i];if(dist(h,f)<.65){s.score=(s.score||0)+f.value;s.coins=(s.coins||0)+f.coins;grew+=f.type==='mega'?3:1;if(s.isPlayer){score=s.score;coinsEarned+=f.coins;}specialFoods.splice(i,1);}}
+    for(let i=corpseFoods.length-1;i>=0;i--)if(dist(h,corpseFoods[i])<.55){s.score=(s.score||0)+15;s.coins=(s.coins||0)+2;grew+=1;if(s.isPlayer){score=s.score;coinsEarned+=2;}corpseFoods.splice(i,1);}
+    s.targetLength=Math.min(260,(s.targetLength||s.body.length)+grew);
+  }
+  function moveContinuous(s,dt,now){
+    if(!s.alive||!s.body.length)return;
+    ensureMotion(s);
+    if(s.isPlayer){
+      if(hasAim){const diff=wrapAngle(aimAngle-s.angle);s.angle=wrapAngle(s.angle+clamp(diff,-2.65*dt,2.65*dt));if(Math.abs(diff)<.06)hasAim=false;}
+      s.angle=wrapAngle(s.angle+steer*2.15*dt);
+    }else aiUpdate(s,dt);
+    setSnakeDirectionLabel(s);
+    const grow=clamp(((s.targetLength||s.body.length)-4)*.035,0,1.6);
+    const sp=s.isPlayer?baseSpeed+grow+(boostHeld?2.2:0)-(brakeHeld?1.5:0):
+      (3.55+clamp((s.body.length-3)/30,0,1)*1.25+clamp(gameTicks/2200,0,1)*.35+(difficulty==='hard'?.45:difficulty==='normal'?.2:0));
+    const h=headOf(s);const next={x:h.x+Math.cos(s.angle)*sp*dt,y:h.y+Math.sin(s.angle)*sp*dt};
+    s.trail.unshift(next);s.body[0]=next;rebuildBody(s);
+    if(hitObstacle(next)){if(s.invincible&&!s.isPlayer){s.angle=wrapAngle(s.angle+Math.PI*(.55+Math.random()*.5));s.trail[0]={...h};rebuildBody(s);}else killAtContinuous(s);return;}
+    const defender=hitBody(s,next,now);
+    if(defender){
+      if(defender===s){killAtContinuous(s);return;}
+      if(defender.invincible&&!defender.isPlayer){if(s.isPlayer)killAtContinuous(s);else s.angle=wrapAngle(s.angle+Math.PI*.65);return;}
+      // Only head-to-body contact eliminates the moving snake, never body-to-body contact.
+      killAtContinuous(s);return;
+    }
+    collectContinuous(s);
+  }
+  window.tick=function(dt){
+    gameTicks++;
+    const now=Date.now();
+    for(const s of snakes){if(s.alive&&!s.isPlayer&&s.invincible&&now>=s.respawnAt)s.invincible=false;}
+    for(const s of snakes)if(s.alive&&!s.isPlayer)moveContinuous(s,dt,now);
+    if(player&&player.alive)moveContinuous(player,dt,now);
+    // Head-to-head collisions: larger snake has a slight advantage; invincible AI cannot be eliminated.
+    const alive=snakes.filter(s=>s.alive&&s.body.length);
+    for(let i=0;i<alive.length;i++)for(let j=i+1;j<alive.length;j++){
+      const a=alive[i],b=alive[j];if(!a.alive||!b.alive)continue;
+      if(dist(headOf(a),headOf(b))<.72){
+        if(a.invincible&&!a.isPlayer){killAtContinuous(b);continue}
+        if(b.invincible&&!b.isPlayer){killAtContinuous(a);continue}
+        const la=a.targetLength||a.body.length,lb=b.targetLength||b.body.length;
+        if(la>lb+1)killAtContinuous(b);else if(lb>la+1)killAtContinuous(a);else if(Math.random()<.5)killAtContinuous(b);else killAtContinuous(a);
+      }
+    }
+    for(const s of snakes){
+      if(!s._deadProcessed&&!s.alive&&s.body.length){s._deadProcessed=true;createCorpseFood(s);if(!s.isPlayer)scheduleRespawn(s);}
+    }
+    respawnDeadAI();
+    if(specialFoods.length<5&&Math.random()<dt*.35)spawnSpecialFood();
+    while(foods.length<LEVELS[difficulty].foods)foods.push(findFreePosition());
+    smoothCamera();updateUI();
+    if(player&&!player.alive)endGame();
+  };
+  window.gameLoop=function(time){
+    if(!gameRunning)return;
+    animationFrame=requestAnimationFrame(gameLoop);
+    if(!lastFrame)lastFrame=time;
+    const dt=Math.min(.035,Math.max(0,(time-lastFrame)/1000));lastFrame=time;
+    draw();
+    if(paused)return;
+    moveAccumulator+=dt;
+    // fixed substeps keep collision stable while rendering remains smooth
+    const step=1/60;
+    while(moveAccumulator>=step){tick(step);moveAccumulator-=step;if(!gameRunning)break;}
+  };
+
+  const originalRespawnDeadAI=window.respawnDeadAI;
+  window.respawnDeadAI=function(){
+    const wasDead=new Set(snakes.filter(s=>!s.isPlayer&&!s.alive).map(s=>s.id));
+    originalRespawnDeadAI();
+    for(const s of snakes){
+      if(!s.isPlayer&&s.alive&&wasDead.has(s.id)&&s.body.length){
+        s.targetLength=s.body.length;s.angle=0;s.trail=[];
+        const h=headOf(s);for(let i=0;i<s.body.length;i++)s.trail.push({x:h.x-i*bodyGap,y:h.y});
+        s.aiThinkTimer=.3+Math.random()*.3;
+      }
+    }
+  };
+
+  // Render the existing arena with smooth, rounded cartoon bodies and eyes following the true heading.
+  window.drawSnakes=function(){
+    for(const s of snakes){
+      if(!s.alive||!s.body||!s.body.length)continue;
+      const alpha=s.invincible&&!s.isPlayer?.34:1;
+      for(let i=s.body.length-1;i>=0;i--){
+        const p=s.body[i],x=(p.x-camera.x)*CELL+CELL/2,y=(p.y-camera.y)*CELL+CELL/2;
+        if(x<-CELL||y<-CELL||x>canvas.width+CELL||y>canvas.height+CELL)continue;
+        let color=s.color;
+        if(s.isPlayer&&DATA.skin==='rainbow')color=`hsl(${(performance.now()/5+i*22)%360},90%,65%)`;
+        const r=CELL*(i===0?.46:.43)*clamp(1-i/Math.max(1,s.body.length)*.2,.78,1);
+        ctx.save();ctx.globalAlpha=alpha;
+        const g=ctx.createRadialGradient(x-r*.32,y-r*.4,1,x,y,r*1.5);g.addColorStop(0,lightenColor(color,.34));g.addColorStop(.55,color);g.addColorStop(1,lightenColor(color,-.34));
+        ctx.fillStyle=g;ctx.shadowColor=color;ctx.shadowBlur=i<2?12:5;ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fill();ctx.shadowBlur=0;
+        if(i>0&&i%3===0){ctx.fillStyle='rgba(255,255,255,.22)';ctx.beginPath();ctx.arc(x-r*.2,y-r*.25,Math.max(1.3,r*.12),0,TAU);ctx.fill();}
+        if(s.invincible&&!s.isPlayer&&i===0){ctx.strokeStyle='rgba(255,255,255,.7)';ctx.lineWidth=1.6;ctx.setLineDash([4,4]);ctx.beginPath();ctx.arc(x,y,r+5+Math.sin(performance.now()/100)*1.5,0,TAU);ctx.stroke();ctx.setLineDash([]);}
+        if(i===0){
+          const a=s.angle||0,sideX=-Math.sin(a),sideY=Math.cos(a);
+          for(const side of [-1,1]){
+            const ex=x+Math.cos(a)*r*.22+sideX*side*r*.42,ey=y+Math.sin(a)*r*.22+sideY*side*r*.42;
+            ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(ex,ey,r*.30,0,TAU);ctx.fill();
+            ctx.fillStyle='#12243a';ctx.beginPath();ctx.arc(ex+Math.cos(a)*r*.07,ey+Math.sin(a)*r*.07,r*.15,0,TAU);ctx.fill();
+            ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(ex-r*.04,ey-r*.07,r*.06,0,TAU);ctx.fill();
+          }
+          ctx.strokeStyle='rgba(8,32,42,.65)';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(x+Math.cos(a)*r*.26,y+Math.sin(a)*r*.26,r*.28,a+.45,a+2.35);ctx.stroke();
+        }
+        ctx.restore();
+      }
+      if(!s.isPlayer){const h=headOf(s),x=(h.x-camera.x)*CELL+CELL/2,y=(h.y-camera.y)*CELL+CELL/2;ctx.font='bold 10px Arial';ctx.textAlign='center';ctx.fillStyle='rgba(235,247,255,.88)';ctx.fillText(s.name,x,y-CELL*.9);}
+    }
+  };
+  function lightenColor(color,amt){
+    if(!color||color==='rainbow'||!color.startsWith('#'))return color;
+    let c=color.slice(1);if(c.length===3)c=c.split('').map(x=>x+x).join('');
+    const n=parseInt(c,16);let r=(n>>16)&255,g=(n>>8)&255,b=n&255;
+    if(amt>=0){r+= (255-r)*amt;g+=(255-g)*amt;b+=(255-b)*amt}else{r*=1+amt;g*=1+amt;b*=1+amt}
+    return `rgb(${Math.round(r)},${Math.round(g)},${Math.round(b)})`;
+  }
+  window.drawEyes=function(s,x,y){/* eyes are drawn inside drawSnakes */};
+
+  // Make the arena less visually tiring: softer grid, rounded obstacles and softer food glow.
+  window.drawWorldGrid=function(){
+    ctx.save();ctx.strokeStyle='rgba(95,150,200,.035)';ctx.lineWidth=1;
+    const offX=(((-camera.x*CELL)%CELL)+CELL)%CELL,offY=(((-camera.y*CELL)%CELL)+CELL)%CELL;
+    for(let x=offX;x<canvas.width;x+=CELL*2){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,canvas.height);ctx.stroke()}
+    for(let y=offY;y<canvas.height;y+=CELL*2){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(canvas.width,y);ctx.stroke()}
+    ctx.restore();
+  };
+  window.drawObstacles=function(){
+    for(const o of obstacles){const x=(o.x-camera.x)*CELL+2,y=(o.y-camera.y)*CELL+2;if(x<-CELL||y<-CELL||x>canvas.width||y>canvas.height)continue;
+      ctx.save();ctx.fillStyle='#102036';ctx.strokeStyle='rgba(85,151,195,.22)';ctx.shadowColor='rgba(60,160,210,.10)';ctx.shadowBlur=5;
+      ctx.beginPath();ctx.roundRect(x,y,CELL-4,CELL-4,5);ctx.fill();ctx.shadowBlur=0;ctx.stroke();ctx.restore();}
+  };
+  // Larger world viewport, larger snake rendering, and a draggable virtual joystick.
+  style.textContent += `
+    .controls{position:fixed;left:max(16px,env(safe-area-inset-left));bottom:max(18px,env(safe-area-inset-bottom));z-index:45;margin:0;display:block;pointer-events:none}
+    #virtualJoystick{width:124px;height:146px;position:relative;pointer-events:auto;touch-action:none;user-select:none;-webkit-user-select:none}
+    #joystickRing{position:absolute;left:0;top:0;width:124px;height:124px;border-radius:50%;border:2px solid rgba(69,202,255,.34);background:radial-gradient(circle,rgba(28,73,105,.24),rgba(6,19,34,.58));box-shadow:0 0 22px rgba(69,202,255,.12),inset 0 0 18px rgba(69,202,255,.07);touch-action:none}
+    #joystickRing:before{content:"";position:absolute;inset:20px;border:1px dashed rgba(69,202,255,.23);border-radius:50%}
+    #joystickKnob{position:absolute;left:50%;top:50%;width:48px;height:48px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle at 35% 28%,#aaf4ff,#36bfff 58%,#1687cf);border:2px solid rgba(232,251,255,.95);box-shadow:0 0 20px rgba(56,194,255,.55),inset 0 -4px 8px rgba(0,45,105,.25);will-change:left,top}
+    #joystickLabel{position:absolute;left:0;right:0;top:128px;text-align:center;font-size:10px;color:#8ca9c6;text-shadow:0 1px 4px #020711;white-space:nowrap}
+    .game-wrap{max-width:100%;padding:7px}
+    canvas{width:100%;height:auto;max-width:100%;aspect-ratio:3/2;object-fit:contain}
+    @media(max-width:600px){#virtualJoystick{transform:scale(.84);transform-origin:bottom left}.controls{left:8px;bottom:10px}}
+  `;
+  const joystick=document.getElementById('virtualJoystick');
+  const ring=document.getElementById('joystickRing');
+  const knob=document.getElementById('joystickKnob');
+  let joystickPointer=null;
+  function resetJoystick(){
+    joystickPointer=null;
+    knob.style.left='50%';knob.style.top='50%';
+    hasAim=false;
+  }
+  function moveJoystick(e){
+    if(joystickPointer!==e.pointerId)return;
+    const rect=ring.getBoundingClientRect();
+    const cx=rect.left+rect.width/2,cy=rect.top+rect.height/2;
+    let dx=e.clientX-cx,dy=e.clientY-cy;
+    const max=rect.width*.31;
+    const length=Math.hypot(dx,dy);
+    if(length>max){dx=dx/length*max;dy=dy/length*max;}
+    knob.style.left=`calc(50% + ${dx}px)`;
+    knob.style.top=`calc(50% + ${dy}px)`;
+    if(Math.hypot(dx,dy)>7&&player&&player.alive&&gameRunning&&!paused){
+      aimAngle=Math.atan2(dy,dx);hasAim=true;steer=0;
+    }
+  }
+  joystick.addEventListener('pointerdown',e=>{
+    if(!gameRunning||paused||!player||!player.alive)return;
+    e.preventDefault();joystickPointer=e.pointerId;
+    try{joystick.setPointerCapture(e.pointerId)}catch(_){ }
+    moveJoystick(e);
+  });
+  joystick.addEventListener('pointermove',e=>{if(joystickPointer===e.pointerId){e.preventDefault();moveJoystick(e)}},{passive:false});
+  joystick.addEventListener('pointerup',e=>{if(joystickPointer===e.pointerId)resetJoystick()});
+  joystick.addEventListener('pointercancel',resetJoystick);
+  joystick.addEventListener('lostpointercapture',resetJoystick);
+  // Keep the original keyboard support, but let arrow keys turn continuously.
+  document.addEventListener('keydown',e=>{
+    const k=e.key.toLowerCase();
+    const dirs={arrowup:-Math.PI/2,w:-Math.PI/2,arrowdown:Math.PI/2,s:Math.PI/2,arrowleft:Math.PI,a:Math.PI,arrowright:0,d:0};
+    if(dirs[k]!==undefined&&gameRunning&&!paused&&player&&player.alive){
+      e.preventDefault();aimAngle=dirs[k];hasAim=true;steer=0;boostHeld=false;brakeHeld=false;
+    }
+  },{passive:false});
+  // Existing store, rank, achievements, data reset, coins and all original UI remain untouched.
+})();
+</script>
+
+
+</body>
+
+</html>
